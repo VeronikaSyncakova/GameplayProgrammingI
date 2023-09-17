@@ -1,2 +1,2 @@
 hello:
-	echo "Checking that tabs are setup correctly
+	echo "Checking that tabs are setup correctly"
