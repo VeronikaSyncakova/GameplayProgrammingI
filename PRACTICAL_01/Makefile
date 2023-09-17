@@ -1,2 +1,9 @@
-hello:
-	echo "Checking that tabs are setup correctly"
+build:
+	@echo "Build started"
+	g++ -o makemeapointerapp makemeapointer.cpp -I.
+	@echo "Build finished"
+.DEFAULT_Goal:= build
+
+clean:
+	@echo "Cleaning up"
+	rm *.o
