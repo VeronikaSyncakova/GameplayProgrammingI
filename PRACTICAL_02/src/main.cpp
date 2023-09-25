@@ -35,7 +35,7 @@ struct Missile
 	Coordinates coordinates;
 	Target target;
 	//launch code
-	string const LAUNCH_CODE="816 80085";
+	string const LAUNCH_CODE="fire";
 
 	bool armed;
 
@@ -91,25 +91,26 @@ struct Missile
 		{
 			coordinates.x=x;
 			coordinates.y=y;
+			launchCode();
 		}
 	}
 
 	void  launchCode()
-	{ /*
+	{ 
 		string ans="";
 			cout<<"Enter launch code: ";
-			cin>>static_cast<string>(ans);
+			cin>>ans;
 			while(!(ans==LAUNCH_CODE))
 			{
 				cout<<"\nEnter launch code or press 0 to view the launch code: ";
-				cin>>static_cast<string>(ans);
+				cin>>ans;
 
-				if (ans=="1")
+				if (ans=="0")
 				{
 					cout<<"\nLaunch code: "<<LAUNCH_CODE<<"\n";
 				}
 			}
-			*/
+			
 	}
 
 	bool fire() //checks if it was possible to fire or if the user had bad luck
@@ -176,7 +177,9 @@ int main()
 	Missile *m = new Missile();
 
 	//launch code
+	cout<<"_____________________________________________\n";
 	cout<<"Launch code: "<<m->LAUNCH_CODE<<"\n";
+	cout<<"_____________________________________________\n";
 	
 	
 	while( e->alive) //keep playing while the enemy is not destroyed
@@ -194,7 +197,7 @@ int main()
 		while(!(m->fire())) //if the weather is bad, repeat until you can shoot
 		{
 			int ans;
-			cout<<"Bad weather, couldn't attack.\n*Press 1 to fire again\n";
+			cout<<"!!!!Bad weather, couldn't attack.\n*Press 1 to fire again!!!!\n";
 			cin>>ans;
 			if (ans==1)
 			{
@@ -211,7 +214,7 @@ int main()
 		else{
 			if (m->viable())
 			{
-				cout<<"Target outside of the board!\nThe board is 6x6\n\n";
+				cout<<"|| Target outside of the board!\nThe board is 6x6 ||\n\n";
 				//m->acquireTarget();
 			}
 			else{
