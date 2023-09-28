@@ -76,7 +76,7 @@ struct Missile
 	void acquireTarget() //set the shooting target
 	{
 		int x,y,ans;
-		cout<<"\nSelect target position (0-6)\n"; //6x6
+		cout<<"\nSelect target position (0-6) [Aquire target]\n"; //6x6
 		cout<<"x: ";
 		cin>>x;
 		cout<<"y: ";
@@ -95,7 +95,7 @@ struct Missile
 		}
 	}
 
-	void  launchCode()
+	void  launchCode() //launch code is fire
 	{ 
 		string ans="";
 			cout<<"Enter launch code: ";
@@ -105,12 +105,12 @@ struct Missile
 				cout<<"\nEnter launch code or press 0 to view the launch code: ";
 				cin>>ans;
 
-				if (ans=="0")
+				if (ans=="0") //shows launch code again
 				{
 					cout<<"\nLaunch code: "<<LAUNCH_CODE<<"\n";
 				}
 			}
-			
+		cout<<"Arm missile\n";
 	}
 
 	bool fire() //checks if it was possible to fire or if the user had bad luck
@@ -119,13 +119,13 @@ struct Missile
 		bool fire=false;
 		if(payload==EXPLOSIVE)
 		{
-			if(chance>5) //lower chance
+			if(chance>3) //lower chance
 			{
 				fire=true;
 			}
 		}
 		else{
-			if(chance>3) //higher chance 
+			if(chance>6) //higher chance 
 			{
 				fire=true;
 			}
@@ -135,13 +135,38 @@ struct Missile
 
 	bool checkCollision() //check collision between missiole and target
 	{
-		if( target.coordinates.x==coordinates.x && target.coordinates.y==coordinates.y)
+		bool collision=false; //if collision is succesfull
+		if (payload==EXPLOSIVE) //hit area is 1x1
 		{
-			return true;
+			if( target.coordinates.x==coordinates.x && target.coordinates.y==coordinates.y)
+			{
+				collision= true;
+			}
 		}
-		else{
-			return false;
+		else //hit area is 1 pixel to each side 
+		{
+			int radiusX[]={coordinates.x-1,coordinates.x, coordinates.x+1}; //hit areas for x
+			int radiusY[]={coordinates.y-1,coordinates.y, coordinates.y+1}; //hit areas for y
+			bool collisionX=false; //collision on x
+			bool collisionY=false; //collision on y
+			for (int i=0; i<3;i++)
+			{
+				if( target.coordinates.x==radiusX[i] ) //collision on x
+				{
+					collisionX= true;
+				}
+				if(target.coordinates.y==radiusY[i]) //collision on y
+				{
+					collisionY=true;
+				}
+				if(collisionX && collisionY) // general collision 
+				{
+					collision=true;
+				}
+			}
 		}
+		return collision;
+
 	}
 	bool viable() //checks if the coordinates are within the playing area
 	{
