@@ -34,6 +34,7 @@ struct Missile
 	WarHead payload;
 	Coordinates coordinates;
 	Target target;
+	
 	//launch code
 	string const LAUNCH_CODE="fire";
 
@@ -56,16 +57,16 @@ struct Missile
 	void selectWarhead() //select warhead type
 	{
 		int warhead;
-		cout<<"Select warhead\n*Explosive-0\n*Nuclear-1\n";
+		cout<<"Select warhead [nuclear has higher chance of bad weather conditions]\n*Explosive-0   [1x1]\n*Nuclear-1     [+1 vertically and horizontally]\n";
 		cin>>warhead;
 		if(warhead==EXPLOSIVE){
 			payload = WarHead::EXPLOSIVE;
-			cout<<"You have chosen: explosive\n";
+			cout<<"You have chosen: explosive\n_____________________________________________\n";
 
 		}
 		else if(warhead==NUCLEAR){
 			payload = WarHead::NUCLEAR;
-			cout<<"You have chosen: nuclear\n";
+			cout<<"You have chosen: nuclear\n_____________________________________________\n";
 		}
 		else{ //error check for invalid input
 			cout<<"Please select again !\n";
@@ -110,7 +111,7 @@ struct Missile
 					cout<<"\nLaunch code: "<<LAUNCH_CODE<<"\n";
 				}
 			}
-		cout<<"Arm missile\n";
+		cout<<"\n^Arm missile^\n\n";
 	}
 
 	bool fire() //checks if it was possible to fire or if the user had bad luck
@@ -184,6 +185,7 @@ struct Missile
 
 int main()
 {
+
 	// Create a new Enemy
 	Enemy *e = new Enemy();
 
@@ -193,7 +195,7 @@ int main()
 	e->coordinates.y = rand()%7;
 
 	// Print Enemy Position
-	cout<<"//////////////////////////////////\n";
+	cout<<"\n//////////////////////////////////\n";
 	cout << "Print Enemy Position" << endl;
 	e->coordinates.print();
 	cout<<"//////////////////////////////////\n";
@@ -202,11 +204,11 @@ int main()
 	Missile *m = new Missile();
 
 	//launch code
-	cout<<"_____________________________________________\n";
+	cout<<"\n_____________________________________________\n";
 	cout<<"Launch code: "<<m->LAUNCH_CODE<<"\n";
-	cout<<"_____________________________________________\n";
-	
-	
+	cout<<"_____________________________________________\n\n\n";
+		
+		
 	while( e->alive) //keep playing while the enemy is not destroyed
 	{
 
@@ -233,41 +235,21 @@ int main()
 		//check collision and destroy the target
 		if(m->checkCollision())
 		{
-			cout<<"Hit! Target destroyed!\n";
+			cout<<":: Hit! Target destroyed! ::\n";
 			e->alive=false;
+				
 		}
 		else{
-			if (m->viable())
+			if (m->viable()) //checks if the missile is within the board range
 			{
 				cout<<"|| Target outside of the board!\nThe board is 6x6 ||\n\n";
-				//m->acquireTarget();
+					
 			}
 			else{
-				cout<<"Missed, try again!\n\n";
+				cout<<":: Missed, try again! ::\n\n";
 			}
 		}
 	}
-
-	/*
-	// Set Initial Position
-	m->coordinates.x = 0;
-	m->coordinates.y = 0;
-
-	// Print Position
-	cout << "Print Missile Position" << endl;
-	m->coordinates.print();
-
-	// Update Position
-	m->update();
-
-	// Print Missile Position
-	cout << "Print Missile Position after an Update" << endl;
-	m->coordinates.print();
-
-
-	// Print Missile target
-	cout << "Print Missile Target Position" << endl;
-	m->target.coordinates.print();*/
-
+		
 	cin.get();
 }
