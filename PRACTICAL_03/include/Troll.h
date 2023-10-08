@@ -8,6 +8,7 @@
 class Troll : public Character{
 public:
 	void fly();			// implementation of pure virtual
+	Type getType();
 };
 
 #endif

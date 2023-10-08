@@ -1,9 +1,91 @@
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 #include <./include/Orc.h>
 #include <./include/Troll.h>
 
 using namespace std;
+
+
+
+Type  selectCharacter()
+	{
+		string ans="";
+		Type player=Type::NONE;
+		while (player==Type::NONE)
+		{
+			cout<<"\n//////////\nSelect your character\nTroll - T\nOrc - O\n";
+			cin>>ans;
+			if(ans=="t"|| ans=="T")
+			{
+				//cout<<"\nTroll\n";
+				player=Type::TROLL;
+			}
+			else if(ans=="o" || ans=="O")
+			{
+				//cout<<"\nOrc\n";
+				player= Type::ORC;
+			}
+			else
+			{
+				cout<<"\nYou have to choose Troll or Orc!\n";
+			}
+		}
+		return player;
+	}
+
+	Type selectEnemy()
+	{
+		Type enemy=static_cast<Type>((rand()%2)+1);
+		/*Type enemy=Type::NONE;
+		if(num==Type::TROLL)
+		{
+			enemy=Type::TROLL;
+		}
+		else if(num==Type::ORC)
+		{
+			enemy=Type::ORC;
+		}*/
+		return enemy;
+	}
+
+	void play(Troll&troll, Orc&orc)
+	{
+		Character* player=nullptr;
+		Character* enemy=nullptr;
+		Type playerType=selectCharacter();
+		if(playerType==Type::TROLL)
+		{
+			player=&troll;
+			cout<<"Congrats, you have chosen troll";
+
+		}
+		else if(playerType==Type::ORC)
+		{
+			player=&orc;
+			cout<<"Congrats, you have chosen orc";
+
+		}
+		
+		player->getType();
+
+		Type enemyType=selectEnemy();
+		if(enemyType==Type::TROLL)
+		{
+			enemy=&troll;
+			cout<<"Your enemy is troll";
+
+		}
+		else if(enemyType==Type::ORC)
+		{
+			enemy=&orc;
+			cout<<"Your enemy is orc";
+
+		}
+		enemy->getType();
+	}
+
 
 int main() {
 	cout << "Let go virtual" << endl;
@@ -12,6 +94,9 @@ int main() {
 	//Character character;
 	//character.flip();
 	//character.walk();
+	//Character is an abstract class, therefore no instances can be made
+
+	/*
 
 	cout << "Let go create an Orc" << endl;
 	Orc orc;		// Creates a Orc reference
@@ -36,6 +121,15 @@ int main() {
 	npc->flip(); 	// Bound at compile time -> action based on type
 	npc->fly();  	// Bound at runtime -> action based on pointer
 	npc->walk();	// Bound at runtime -> action based on pointer
+
+	*/
+	
+	srand(time(nullptr));
+
+	Troll troll;
+	Orc orc;
+
+	play(troll, orc);
 
 	cin.get();
 
