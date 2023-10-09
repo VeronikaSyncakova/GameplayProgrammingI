@@ -2,10 +2,12 @@
 #define CHARACTER_H
 
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 enum class Type {NONE,TROLL, ORC};
 enum class Attack {NONE,BAT,SWORD};
-enum class Defend {NONE,Shield};
+enum class Defend {NONE,SHIELD};
 
 // Abstract Character Class
 
@@ -17,6 +19,8 @@ public:
 	virtual Type getType()=0; //returns the type of a character
 	virtual void choose(int t_roundCounter); // enables player to choose weapon or shield
 	virtual void chooseWeapon(); //player can choose which weapon they want to use
+	virtual void chooseBarrier(); //player chooses a barrier
+	virtual void autoChoose(); //enemy randomised weapon or barrier
 	bool getAlive();
 	
 

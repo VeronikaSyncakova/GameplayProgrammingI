@@ -18,13 +18,35 @@ void Character::chooseWeapon()
 	{
 		m_weapon=Attack::SWORD;
 	}
+    else
+    {
+        std::cout<<"You have to choose from these: \n";
+        chooseWeapon();
+    }
+}
+
+void Character::chooseBarrier()
+{
+    int barrier;
+	std::cout<<"Shield - 1\n";
+	std::cin>>barrier;
+	if(static_cast<Defend>(barrier)==Defend::SHIELD)
+	{
+		m_barrier=Defend::SHIELD;
+	}
+    else
+    {
+        std::cout<<"You have to choose from these: \n";
+        chooseBarrier();
+    }
+	
 }
 
 void Character::choose(int t_roundCounter)
 {
     int ans;
-    std::cout<<"ROUND "<<t_roundCounter<<"\n";
-	std::cout<<" Attack or defend?\n";
+    std::cout<<"\n/////\nROUND "<<t_roundCounter<<"\n";
+	std::cout<<"Attack or defend?\n";
 	std::cout<<"Attack - 1\nDefend - 2\n";
 	std::cin>>ans;
 	if(ans==1)
@@ -33,8 +55,21 @@ void Character::choose(int t_roundCounter)
 	}
 	else if(ans ==2)
 	{
-        std::cout<<"defend\n";
+        chooseBarrier();
 	}
+}
+
+void Character::autoChoose()
+{
+    int num=rand()%2;
+    if (num==0) //attack
+    {
+        m_weapon=static_cast<Attack>((rand()%3)+1); //bat or sword
+    }
+    else if(num==1)
+    {
+        m_barrier=Defend::SHIELD;
+    }
 }
 
 

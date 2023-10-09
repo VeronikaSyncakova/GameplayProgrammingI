@@ -1,6 +1,4 @@
 #include <iostream>
-#include <ctime>
-#include <cstdlib>
 
 #include <./include/Orc.h>
 #include <./include/Troll.h>
@@ -91,6 +89,7 @@ Type  selectCharacter()
 		while(player->getAlive() && enemy->getAlive())
 		{
 			player->choose(roundCounter);
+			enemy->autoChoose();
 			roundCounter++;
 		}
 	}
