@@ -45,6 +45,8 @@ void Character::chooseBarrier()
 void Character::choose(int t_roundCounter)
 {
     int ans;
+    m_weapon=Attack::NONE;
+    m_barrier=Defend::NONE;
     std::cout<<"\n/////\nROUND "<<t_roundCounter<<"\n";
 	std::cout<<"Attack or defend?\n";
 	std::cout<<"Attack - 1\nDefend - 2\n";
@@ -61,14 +63,26 @@ void Character::choose(int t_roundCounter)
 
 void Character::autoChoose()
 {
+    m_weapon=Attack::NONE;
+    m_barrier=Defend::NONE;    
     int num=rand()%2;
     if (num==0) //attack
     {
-        m_weapon=static_cast<Attack>((rand()%3)+1); //bat or sword
+        m_weapon=static_cast<Attack>((rand()%2)+1); //bat or sword
+        if(m_weapon==Attack::BAT)
+        {
+            std::cout<<"Enemy has a bat\n";
+        }
+        else if(m_weapon==Attack::SWORD)
+        {
+            std::cout<<"Enemy has a sword\n";
+        }
     }
     else if(num==1)
     {
         m_barrier=Defend::SHIELD;
+        std::cout<<"Enemy has a shield\n";
+
     }
 }
 
