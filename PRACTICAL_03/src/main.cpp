@@ -50,6 +50,8 @@ Type  selectCharacter()
 		return enemy;
 	}
 
+	
+
 	void play(Troll&troll, Orc&orc)
 	{
 		Character* player=nullptr;
@@ -58,13 +60,13 @@ Type  selectCharacter()
 		if(playerType==Type::TROLL)
 		{
 			player=&troll;
-			cout<<"Congrats, you have chosen troll";
+			cout<<"Congrats, you have chosen troll\n";
 
 		}
 		else if(playerType==Type::ORC)
 		{
 			player=&orc;
-			cout<<"Congrats, you have chosen orc";
+			cout<<"Congrats, you have chosen orc\n";
 
 		}
 		
@@ -74,16 +76,23 @@ Type  selectCharacter()
 		if(enemyType==Type::TROLL)
 		{
 			enemy=&troll;
-			cout<<"Your enemy is troll";
+			cout<<"Your enemy is troll\n";
 
 		}
 		else if(enemyType==Type::ORC)
 		{
 			enemy=&orc;
-			cout<<"Your enemy is orc";
+			cout<<"Your enemy is orc\n";
 
 		}
 		enemy->getType();
+
+		int roundCounter=0;
+		while(player->getAlive() && enemy->getAlive())
+		{
+			player->choose(roundCounter);
+			roundCounter++;
+		}
 	}
 
 
