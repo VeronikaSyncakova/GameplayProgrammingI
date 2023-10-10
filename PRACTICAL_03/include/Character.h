@@ -5,9 +5,15 @@
 #include <ctime>
 #include <cstdlib>
 
+#include <./include/Weapon.h>
+#include <./include/Bat.h>
+#include <./include/Sword.h>
+#include <./include/Shield.h>
+
+
 enum class Type {NONE,TROLL, ORC};
-enum class Attack {NONE,BAT,SWORD};
-enum class Defend {NONE,SHIELD};
+//enum class Attack {NONE,BAT,SWORD, SHIELD};
+
 
 // Abstract Character Class
 
@@ -22,12 +28,14 @@ public:
 	virtual void chooseBarrier(); //player chooses a barrier
 	virtual void autoChoose(); //enemy randomised weapon or barrier
 	bool getAlive();
+	//Attack getWeapon();
+	void adjustHealth(int t_value);
 	
 
 private:
 	bool m_alive=true;
 	int m_health=100;
-	Attack m_weapon=Attack::NONE;
-	Defend m_barrier=Defend::NONE;
+	Weapon* m_weapon=nullptr;
+	
 };
 #endif

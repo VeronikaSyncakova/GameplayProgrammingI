@@ -48,6 +48,18 @@ Type  selectCharacter()
 		return enemy;
 	}
 
+	/*
+	void calculateHealth()
+	{
+		if(player->getWeapon()==Attack::BAT)
+		{
+			if(enemy->getWeapon()==Attack::BAT)
+			{
+				player
+			}
+		}
+	}*/
+
 	
 
 	void play(Troll&trollP, Orc&orcP, Troll&trollE, Orc&orcE)
