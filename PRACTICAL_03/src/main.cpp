@@ -137,7 +137,8 @@ Type  selectCharacter()
 		int roundCounter=1;
 		while(player->getAlive() && enemy->getAlive())
 		{
-			player->choose(roundCounter);
+			cout<<"\n/////\nROUND "<<roundCounter<<"\n";
+			player->choose();
 			enemy->autoChoose();
 			calculateHealth(player, enemy);
 			roundCounter++;

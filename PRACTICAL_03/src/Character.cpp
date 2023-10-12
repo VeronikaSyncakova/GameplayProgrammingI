@@ -16,7 +16,19 @@ void Character::chooseWeapon()
 	}
 	else if(weapon==2)
 	{
-		m_weapon=&m_sword;
+        
+        if(m_sword.canUse())
+        {
+            std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
+		    m_weapon=&m_sword;
+            m_sword.setUnusedRounds(0);
+            std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
+        }
+        else
+        {
+            std::cout<<"The sword cooldown is 2 rounds. Current amount of unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
+            choose();
+        }
 	}
     else
     {
@@ -32,7 +44,18 @@ void Character::chooseBarrier()
 	std::cin>>barrier;
 	if(barrier==1)
 	{
-		m_weapon=&m_shield;
+        if(m_shield.canUse())
+        {
+            std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
+		    m_weapon=&m_shield;
+            m_shield.setUnusedRounds(0);
+            std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
+        }
+        else
+        {
+            std::cout<<"The shield cooldown is 1 round. Current amount of unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
+            choose();
+        }
 	}
     else
     {
@@ -42,14 +65,18 @@ void Character::chooseBarrier()
 	
 }
 
-void Character::choose(int t_roundCounter)
+void Character::choose()
 {
     int ans;
-    //m_weapon=Attack::NONE;
-    std::cout<<"\n/////\nROUND "<<t_roundCounter<<"\n";
 	std::cout<<"Attack or defend?\n";
 	std::cout<<"Attack - 1\nDefend - 2\n";
 	std::cin>>ans;
+    std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
+    std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
+    m_sword.increaseUnusedRounds();
+    m_shield.increaseUnusedRounds();
+    std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
+    std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
 	if(ans==1)
 	{
 		chooseWeapon();
@@ -68,16 +95,20 @@ void Character::autoChoose()
         m_weapon=&m_bat;
         std::cout<<"Enemy has a bat\n";
     }
-    else if(weapon==Attack::SWORD)
+    else if(weapon==Attack::SWORD && m_sword.canUse())
     {
         m_weapon=&m_sword;
         std::cout<<"Enemy has a sword\n";
     }
-    else if( weapon==Attack::SHIELD)
+    else if( weapon==Attack::SHIELD && m_sword.canUse())
     {
         m_weapon= &m_shield;
         std::cout<<"Enemy has a shield\n";
 
+    }
+    else
+    {
+        autoChoose();
     }
 }
 

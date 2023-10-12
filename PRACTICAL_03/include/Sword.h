@@ -7,7 +7,6 @@ class Sword:public Weapon
 {
 public:
     Attack getWeaponType();
-    bool canUse();
 
 private:
     int const m_COOLDOWN=2;
