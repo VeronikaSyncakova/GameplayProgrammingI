@@ -4,3 +4,4 @@ Attack Sword::getWeaponType()
 {
     return Attack::SWORD;
 }
+

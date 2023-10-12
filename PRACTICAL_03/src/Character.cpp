@@ -12,11 +12,11 @@ void Character::chooseWeapon()
 	std::cin>>weapon;
 	if(weapon==1)
 	{
-		m_weapon= new Bat;
+		m_weapon= &m_bat;
 	}
 	else if(weapon==2)
 	{
-		m_weapon=new Sword;
+		m_weapon=&m_sword;
 	}
     else
     {
@@ -32,7 +32,7 @@ void Character::chooseBarrier()
 	std::cin>>barrier;
 	if(barrier==1)
 	{
-		m_weapon=new Shield;
+		m_weapon=&m_shield;
 	}
     else
     {
@@ -62,20 +62,20 @@ void Character::choose(int t_roundCounter)
 
 void Character::autoChoose()
 {   
-    Attack weapon=static_cast<Attack>(rand()%2); //chooses weapons or shield
+    Attack weapon=static_cast<Attack>(rand()%3); //chooses weapons or shield
     if(weapon==Attack::BAT)
     {
-        m_weapon=new Bat;
+        m_weapon=&m_bat;
         std::cout<<"Enemy has a bat\n";
     }
     else if(weapon==Attack::SWORD)
     {
-        m_weapon=new Sword;
+        m_weapon=&m_sword;
         std::cout<<"Enemy has a sword\n";
     }
     else if( weapon==Attack::SHIELD)
     {
-        m_weapon= new Shield;
+        m_weapon= &m_shield;
         std::cout<<"Enemy has a shield\n";
 
     }
@@ -91,7 +91,20 @@ bool Character::getAlive()
 
 void Character::adjustHealth(int t_value)
 {
-    m_health=m_health+t_value;
+    if(m_health+t_value<100)
+    {
+        m_health=m_health+t_value;
+    }
+    else if(m_health<100)
+    {
+        m_health=100;
+    }
+
+    if(m_health<=0)
+    {
+        m_health=0;
+        m_alive=false;
+    }
 }
 
 Weapon* Character::getWeapon()

@@ -38,6 +38,9 @@ private:
 	bool m_alive=true;
 	int m_health=100;
 	Weapon* m_weapon=nullptr;
+	Bat m_bat;
+	Sword m_sword;
+	Shield m_shield;
 	
 };
 #endif

@@ -4,3 +4,4 @@ Attack Shield::getWeaponType()
 {
     return Attack::SHIELD;
 }
+

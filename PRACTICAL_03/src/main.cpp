@@ -192,6 +192,7 @@ int main() {
 	Troll trollE;
 	Orc orcE;
 
+
 	play(trollP, orcP, trollE, orcE);
 
 	cin.get();

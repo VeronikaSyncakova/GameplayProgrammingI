@@ -7,7 +7,8 @@ class Bat:public Weapon
 {
 public:
     Attack getWeaponType();
-    
+    bool canUse();
+
 };
 
 #endif
