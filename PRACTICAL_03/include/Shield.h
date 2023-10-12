@@ -6,7 +6,7 @@
 class Shield:public Weapon
 {
 public:
-    Attack getWeapon();
+    Attack getWeaponType();
     
 };
 

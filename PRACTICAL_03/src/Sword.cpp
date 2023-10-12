@@ -1,6 +1,6 @@
 #include <./include/Sword.h>
 
-Attack Sword::getWeapon()
+Attack Sword::getWeaponType()
 {
     return Attack::SWORD;
 }

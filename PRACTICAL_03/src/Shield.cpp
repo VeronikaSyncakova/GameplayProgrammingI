@@ -1,6 +1,6 @@
 #include <./include/Shield.h>
 
-Attack Shield::getWeapon()
+Attack Shield::getWeaponType()
 {
     return Attack::SHIELD;
 }

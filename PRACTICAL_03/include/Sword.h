@@ -6,7 +6,7 @@
 class Sword:public Weapon
 {
 public:
-    Attack getWeapon();
+    Attack getWeaponType();
     
 };
 

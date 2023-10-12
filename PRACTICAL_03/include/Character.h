@@ -28,8 +28,10 @@ public:
 	virtual void chooseBarrier(); //player chooses a barrier
 	virtual void autoChoose(); //enemy randomised weapon or barrier
 	bool getAlive();
-	//Attack getWeapon();
 	void adjustHealth(int t_value);
+	Weapon* getWeapon(); //returns pointer to the players weapon
+	int getHealth();
+
 	
 
 private:

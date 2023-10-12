@@ -6,7 +6,7 @@
 class Bat:public Weapon
 {
 public:
-    Attack getWeapon();
+    Attack getWeaponType();
     
 };
 

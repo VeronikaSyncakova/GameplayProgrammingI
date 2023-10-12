@@ -36,29 +36,66 @@ Type  selectCharacter()
 	Type selectEnemy()
 	{
 		Type enemy=static_cast<Type>((rand()%2)+1);
-		/*Type enemy=Type::NONE;
-		if(num==Type::TROLL)
-		{
-			enemy=Type::TROLL;
-		}
-		else if(num==Type::ORC)
-		{
-			enemy=Type::ORC;
-		}*/
+		
 		return enemy;
 	}
 
-	/*
-	void calculateHealth()
+	
+	void calculateHealth(Character* player, Character* enemy)
 	{
-		if(player->getWeapon()==Attack::BAT)
+		if(player->getWeapon()->getWeaponType()==Attack::BAT)
 		{
-			if(enemy->getWeapon()==Attack::BAT)
+			if(enemy->getWeapon()->getWeaponType()==Attack::BAT)
 			{
-				player
+				player->adjustHealth(-20);
+				enemy->adjustHealth(-20);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD)
+			{
+				player->adjustHealth(-30);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD)
+			{
+				player->adjustHealth(10);
 			}
 		}
-	}*/
+		else if(player->getWeapon()->getWeaponType()==Attack::SWORD)
+		{
+			if(enemy->getWeapon()->getWeaponType()==Attack::BAT)
+			{
+				player->adjustHealth(20);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD)
+			{
+				player->adjustHealth(-10);
+				enemy->adjustHealth(-10);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD)
+			{
+				player->adjustHealth(30);
+			}
+		}
+		else if(player->getWeapon()->getWeaponType()==Attack::SHIELD)
+		{
+			if(enemy->getWeapon()->getWeaponType()==Attack::BAT)
+			{
+				player->adjustHealth(10);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD)
+			{
+				player->adjustHealth(-30);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD)
+			{
+				player->adjustHealth(-10);
+				enemy->adjustHealth(-10);
+			}
+		}
+		cout<<"Player health: "<<player->getHealth()<<"\n";
+		cout<<"Enemy health: "<<enemy->getHealth()<<"\n";
+
+
+	}
 
 	
 
@@ -102,7 +139,7 @@ Type  selectCharacter()
 		{
 			player->choose(roundCounter);
 			enemy->autoChoose();
-			//calculateHealth();
+			calculateHealth(player, enemy);
 			roundCounter++;
 		}
 	}

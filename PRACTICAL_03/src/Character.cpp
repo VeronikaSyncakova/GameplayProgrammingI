@@ -10,11 +10,11 @@ void Character::chooseWeapon()
 	int weapon;
 	std::cout<<"Bat - 1\nSword - 2\n";
 	std::cin>>weapon;
-	if(static_cast<Attack>(weapon)==Attack::BAT)
+	if(weapon==1)
 	{
 		m_weapon= new Bat;
 	}
-	else if(static_cast<Attack>(weapon)==Attack::SWORD)
+	else if(weapon==2)
 	{
 		m_weapon=new Sword;
 	}
@@ -62,7 +62,7 @@ void Character::choose(int t_roundCounter)
 
 void Character::autoChoose()
 {   
-    Attack weapon=static_cast<Attack>((rand()%3)+1); //chooses weapons or shield
+    Attack weapon=static_cast<Attack>(rand()%2); //chooses weapons or shield
     if(weapon==Attack::BAT)
     {
         m_weapon=new Bat;
@@ -92,5 +92,15 @@ bool Character::getAlive()
 void Character::adjustHealth(int t_value)
 {
     m_health=m_health+t_value;
+}
+
+Weapon* Character::getWeapon()
+{
+    return m_weapon;
+}
+
+int Character::getHealth()
+{
+    return m_health;
 }
 

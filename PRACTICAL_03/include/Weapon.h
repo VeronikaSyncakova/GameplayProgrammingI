@@ -5,7 +5,7 @@ enum class Attack {BAT,SWORD, SHIELD};
 class Weapon
 {
 public:
-    virtual Attack getWeapon()=0; //returns weapon type
+    virtual Attack getWeaponType()=0; //returns weapon type
 
 private:
     

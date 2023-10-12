@@ -1,6 +1,6 @@
 #include <./include/Bat.h>
 
-Attack Bat::getWeapon()
+Attack Bat::getWeaponType()
 {
     return Attack::BAT;
 }
