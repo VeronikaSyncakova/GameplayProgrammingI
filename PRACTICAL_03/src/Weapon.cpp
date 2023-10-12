@@ -2,7 +2,8 @@
 
 bool Weapon::canUse()
 {
-    if(m_unusedRounds<m_COOLDOWN)
+    std::cout<<"cooldown: "<<m_COOLDOWN<<"\n";
+    if(m_unusedRounds>m_COOLDOWN)
     {
         return true;
     }

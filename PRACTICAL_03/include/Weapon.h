@@ -1,6 +1,8 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#include <iostream>
+
 enum class Attack {BAT,SWORD, SHIELD};
 class Weapon
 {
@@ -12,8 +14,8 @@ public:
     int getUnusedRounds();
 
 private:
-    int const m_COOLDOWN=0;
-    int m_unusedRounds=1;
+    int m_COOLDOWN;
+    int m_unusedRounds;
 
 
 };

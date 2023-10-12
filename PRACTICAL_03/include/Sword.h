@@ -9,7 +9,7 @@ public:
     Attack getWeaponType();
 
 private:
-    int const m_COOLDOWN=2;
+    int m_COOLDOWN=2;
     int m_unusedRounds=0;
     
 };
