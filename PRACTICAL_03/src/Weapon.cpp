@@ -1,9 +1,13 @@
 #include <./include/Weapon.h>
 
+Weapon::Weapon(int t_coolDown, int t_unusedRounds): m_coolDown(t_coolDown), m_unusedRounds(t_unusedRounds)
+{
+
+}
+
 bool Weapon::canUse()
 {
-    std::cout<<"cooldown: "<<m_COOLDOWN<<"\n";
-    if(m_unusedRounds>m_COOLDOWN)
+    if(m_unusedRounds>=m_coolDown)
     {
         return true;
     }

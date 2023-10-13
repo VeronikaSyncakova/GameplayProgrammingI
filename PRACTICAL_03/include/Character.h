@@ -31,6 +31,7 @@ public:
 	void adjustHealth(int t_value);
 	Weapon* getWeapon(); //returns pointer to the players weapon
 	int getHealth();
+	void increaseRoundWeapons(); //increases unused rounds for weapons
 
 	
 

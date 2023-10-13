@@ -6,10 +6,10 @@
 class Shield:public Weapon
 {
 public:
+    Shield();
     Attack getWeaponType();
 private:
-    int m_COOLDOWN=1;
-    int m_unusedRounds=0;
+    
 };
 
 #endif

@@ -6,11 +6,11 @@
 class Sword:public Weapon
 {
 public:
+    Sword();
     Attack getWeaponType();
 
 private:
-    int m_COOLDOWN=2;
-    int m_unusedRounds=0;
+    
     
 };
 

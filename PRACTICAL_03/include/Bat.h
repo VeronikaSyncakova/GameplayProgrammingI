@@ -6,11 +6,11 @@
 class Bat:public Weapon
 {
 public:
+    Bat();
     Attack getWeaponType();
     bool canUse();
 private:
-    int m_COOLDOWN=0;
-    int m_unusedRounds=1;
+    
 };
 
 #endif

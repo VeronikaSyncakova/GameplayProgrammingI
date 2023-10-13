@@ -19,14 +19,11 @@ void Character::chooseWeapon()
         
         if(m_sword.canUse())
         {
-            std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
 		    m_weapon=&m_sword;
-            m_sword.setUnusedRounds(0);
-            std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
         }
         else
         {
-            std::cout<<"The sword cooldown is 2 rounds. Current amount of unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
+            std::cout<<"The sword cooldown is 2 rounds. Current amount of unused rounds: "<<m_sword.getUnusedRounds()<<"\nChoose again\n";
             choose();
         }
 	}
@@ -46,14 +43,11 @@ void Character::chooseBarrier()
 	{
         if(m_shield.canUse())
         {
-            std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
 		    m_weapon=&m_shield;
-            m_shield.setUnusedRounds(0);
-            std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
         }
         else
         {
-            std::cout<<"The shield cooldown is 1 round. Current amount of unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
+            std::cout<<"The shield cooldown is 1 round. Current amount of unused rounds: "<<m_shield.getUnusedRounds()<<"\nChoose again\n";
             choose();
         }
 	}
@@ -71,12 +65,7 @@ void Character::choose()
 	std::cout<<"Attack or defend?\n";
 	std::cout<<"Attack - 1\nDefend - 2\n";
 	std::cin>>ans;
-    std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
-    std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
-    m_sword.increaseUnusedRounds();
-    m_shield.increaseUnusedRounds();
-    std::cout<<"Sword unused rounds: "<<m_sword.getUnusedRounds()<<"\n";
-    std::cout<<"Shield unused rounds: "<<m_shield.getUnusedRounds()<<"\n";
+    
 	if(ans==1)
 	{
 		chooseWeapon();
@@ -148,3 +137,9 @@ int Character::getHealth()
     return m_health;
 }
 
+void Character::increaseRoundWeapons()
+{
+    m_bat.increaseUnusedRounds();
+    m_sword.increaseUnusedRounds();
+    m_shield.increaseUnusedRounds();
+}

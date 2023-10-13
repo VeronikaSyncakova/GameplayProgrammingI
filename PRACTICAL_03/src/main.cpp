@@ -140,6 +140,10 @@ Type  selectCharacter()
 			cout<<"\n/////\nROUND "<<roundCounter<<"\n";
 			player->choose();
 			enemy->autoChoose();
+			player->increaseRoundWeapons();
+			enemy->increaseRoundWeapons();
+			player->getWeapon()->setUnusedRounds(0);
+			enemy->getWeapon()->setUnusedRounds(0);
 			calculateHealth(player, enemy);
 			roundCounter++;
 		}
