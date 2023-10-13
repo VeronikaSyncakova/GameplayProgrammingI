@@ -99,6 +99,8 @@ Type  selectCharacter()
 
 	
 
+	
+
 	void play(Troll&trollP, Orc&orcP, Troll&trollE, Orc&orcE)
 	{
 		Character* player=nullptr;
@@ -117,7 +119,7 @@ Type  selectCharacter()
 
 		}
 		
-		player->getType();
+		//player->getType();
 
 		Type enemyType=selectEnemy();
 		if(enemyType==Type::TROLL)
@@ -132,7 +134,7 @@ Type  selectCharacter()
 			cout<<"Your enemy is orc\n";
 
 		}
-		enemy->getType();
+		//enemy->getType();
 
 		int roundCounter=1;
 		while(player->getAlive() && enemy->getAlive())
@@ -146,6 +148,30 @@ Type  selectCharacter()
 			enemy->getWeapon()->setUnusedRounds(0);
 			calculateHealth(player, enemy);
 			roundCounter++;
+		}
+
+		int ans;
+		if(player->getHealth()==enemy->getHealth())
+		{
+			cout<<"Draw :|\nDo you want to play again?\n Yes - 1\nNo - 2\n";
+			cin>>ans;
+		}
+		else if(player->getHealth()==0)
+		{
+			cout<<"You have lost :(\nDo you want to play again?\nYes - 1\nNo - 2\n";
+			cin>>ans;
+		}
+		else if(enemy->getHealth()==0)
+		{
+			cout<<"You have won :)\nDo you want to play again?\nYes- 1\nNo - 2\n";
+			cin>>ans;
+		}
+
+		if(ans==1)
+		{
+			player->adjustHealth(100); //alive again
+			enemy->adjustHealth(100);
+			play(trollP, orcP, trollE, orcE);
 		}
 	}
 

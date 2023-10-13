@@ -79,6 +79,7 @@ void Character::choose()
 void Character::autoChoose()
 {   
     Attack weapon=static_cast<Attack>(rand()%3); //chooses weapons or shield
+    std::cout<<"enemy weapon: "<<static_cast<int>(weapon)<<"\n";
     if(weapon==Attack::BAT)
     {
         m_weapon=&m_bat;
@@ -89,7 +90,7 @@ void Character::autoChoose()
         m_weapon=&m_sword;
         std::cout<<"Enemy has a sword\n";
     }
-    else if( weapon==Attack::SHIELD && m_sword.canUse())
+    else if( weapon==Attack::SHIELD && m_shield.canUse())
     {
         m_weapon= &m_shield;
         std::cout<<"Enemy has a shield\n";
@@ -124,6 +125,10 @@ void Character::adjustHealth(int t_value)
     {
         m_health=0;
         m_alive=false;
+    }
+    else
+    {
+        m_alive=true;
     }
 }
 
