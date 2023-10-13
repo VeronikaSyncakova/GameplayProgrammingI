@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-enum class Attack {BAT,SWORD, SHIELD};
-class Weapon
+enum class Attack {BAT,SWORD, SHIELD, ARMOUR, AXE};
+class Weapon //abstract weapon class
 {
 public:
     Weapon(int t_coolDown=0, int t_unusedRounds=0);

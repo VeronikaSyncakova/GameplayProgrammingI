@@ -41,7 +41,21 @@ Type  selectCharacter() //user chooses either orc or troll
 	
 	void calculateHealth(Character* player, Character* enemy) //calculates players and enemies health according to the game economy and displays them
 	{
-		if(player->getWeapon()->getWeaponType()==Attack::BAT)
+		if(player->getWeapon()->getWeaponType()==Attack::ARMOUR || enemy->getWeapon()->getWeaponType()==Attack::ARMOUR)
+		{//do nothing
+		}
+		else if(player->getWeapon()->getWeaponType()==Attack::AXE || enemy->getWeapon()->getWeaponType()==Attack::AXE) //axe
+		{
+			if(player->getWeapon()->getWeaponType()==Attack::AXE)
+			{
+				enemy->adjustHealth(-30);
+			}
+			else if(enemy->getWeapon()->getWeaponType()==Attack::AXE)
+			{
+				player->adjustHealth(-30);
+			}
+		}
+		else if(player->getWeapon()->getWeaponType()==Attack::BAT)
 		{
 			if(enemy->getWeapon()->getWeaponType()==Attack::BAT) //bat vs bat
 			{

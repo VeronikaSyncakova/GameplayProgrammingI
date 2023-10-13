@@ -9,6 +9,8 @@
 #include <./include/Bat.h>
 #include <./include/Sword.h>
 #include <./include/Shield.h>
+#include <./include/Armour.h>
+#include <./include/Axe.h>
 
 
 enum class Type {NONE,TROLL, ORC};
@@ -21,7 +23,7 @@ public:
 	void flip();
 	virtual void walk(); 	// Virtual Method Implemented by Character or Subclass(es)
 	virtual void fly() = 0; // Pure virtual function which makes Character Class an Abstract Class
-	
+
 	virtual Type getType()=0; //returns the type of a character
 	virtual void choose(); // enables player to choose weapon or shield
 	virtual void chooseWeapon(); //player can choose which weapon they want to use
@@ -42,6 +44,7 @@ private:
 	Bat m_bat;
 	Sword m_sword;
 	Shield m_shield;
-	
+	Armour m_armour;
+	Axe m_axe;
 };
 #endif

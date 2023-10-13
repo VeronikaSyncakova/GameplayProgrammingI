@@ -20,8 +20,7 @@ else
 	TARGET		:= ${BUILD_DIR}/game.bin
 endif
 
-SRC			:= ${SRC_DIR}/main.cpp ${SRC_DIR}/Troll.cpp ${SRC_DIR}/Orc.cpp ${SRC_DIR}/Character.cpp ${SRC_DIR}/Bat.cpp ${SRC_DIR}/Sword.cpp ${SRC_DIR}/Shield.cpp ${SRC_DIR}/Weapon.cpp
-
+SRC			:= ${SRC_DIR}/main.cpp ${SRC_DIR}/Troll.cpp ${SRC_DIR}/Orc.cpp ${SRC_DIR}/Character.cpp ${SRC_DIR}/Bat.cpp ${SRC_DIR}/Sword.cpp ${SRC_DIR}/Shield.cpp ${SRC_DIR}/Weapon.cpp ${SRC_DIR}/Armour.cpp ${SRC_DIR}/Axe.cpp
 all			:= build
 
 build:

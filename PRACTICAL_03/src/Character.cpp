@@ -8,7 +8,7 @@ void Character::walk() { std::cout << "CHARACTER : Just in case they are too you
 void Character::chooseWeapon() //player chooses their desired weapon
 {
 	int weapon;
-	std::cout<<"    Bat - 1\n    Sword - 2\n";
+	std::cout<<"    Bat - 1\n    Sword - 2\n    Axe - 3\n";
 	std::cin>>weapon;
 	if(weapon==1) //bat
 	{
@@ -29,6 +29,20 @@ void Character::chooseWeapon() //player chooses their desired weapon
             choose();
         }
 	}
+    else if(weapon==3) //axe
+	{
+        if(m_axe.canUse()) 
+        {
+		    m_weapon=&m_axe; //current weapon is an axe
+            std::cout<<"\nYou have an AXE\n";
+
+        }
+        else 
+        {
+            std::cout<<"***The axe cooldown is 7 rounds. Current amount of unused rounds: "<<m_axe.getUnusedRounds()<<"***\n!!!Choose again!!!\n";
+            choose();
+        }
+	}
     else
     {
         std::cout<<"!!!You have to choose from these: \n";
@@ -39,7 +53,7 @@ void Character::chooseWeapon() //player chooses their desired weapon
 void Character::chooseBarrier() //player chooses their desired defence barrier
 {
     int barrier;
-	std::cout<<"    Shield - 1\n";
+	std::cout<<"    Shield - 1\n    Armour - 2\n";
 	std::cin>>barrier;
 	if(barrier==1)
 	{
@@ -54,6 +68,19 @@ void Character::chooseBarrier() //player chooses their desired defence barrier
             choose();
         }
 	}
+    else if(barrier==2)
+    {
+        if(m_armour.canUse())
+        {
+		    m_weapon=&m_armour; //player currently has an armour
+            std::cout<<"\nYou have an ARMOUR \n";
+        }
+        else
+        {
+            std::cout<<"***The armour cooldown is 7 rounds. Current amount of unused rounds: "<<m_armour.getUnusedRounds()<<"***\n!!!Choose again!!!\n";
+            choose();
+        }
+    }
     else
     {
         std::cout<<"!!!You have to choose from these: \n";
@@ -86,7 +113,7 @@ void Character::choose() //player chooses if they want to attack or defend
 
 void Character::autoChoose() //chooses current weapon automatically 
 {   
-    Attack weapon=static_cast<Attack>(rand()%3); //chooses weapons or shield
+    Attack weapon=static_cast<Attack>(rand()%5); //chooses weapons or defences
     if(weapon==Attack::BAT)
     {
         m_weapon=&m_bat;
@@ -101,6 +128,18 @@ void Character::autoChoose() //chooses current weapon automatically
     {
         m_weapon= &m_shield;
         std::cout<<"Enemy has a SHIELD\n";
+
+    }
+    else if( weapon==Attack::ARMOUR && m_armour.canUse())
+    {
+        m_weapon= &m_armour;
+        std::cout<<"Enemy has an ARMOUR\n";
+
+    }
+    else if( weapon==Attack::AXE && m_axe.canUse())
+    {
+        m_weapon= &m_axe;
+        std::cout<<"Enemy has an AXE\n";
 
     }
     else
@@ -154,4 +193,6 @@ void Character::increaseRoundWeapons() //increases number of unused rounds for w
     m_bat.increaseUnusedRounds();
     m_sword.increaseUnusedRounds();
     m_shield.increaseUnusedRounds();
+    m_armour.increaseUnusedRounds();
+    m_axe.increaseUnusedRounds();
 }
