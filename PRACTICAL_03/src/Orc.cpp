@@ -6,7 +6,6 @@ void Orc::fly() { std::cout << "ORC : Dooper is flapping and flying" << std::end
 
 Type Orc::getType()
 {
-    //std::cout<<"ORC\n";
     return Type::ORC;
 
 }

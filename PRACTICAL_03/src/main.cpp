@@ -7,93 +7,93 @@ using namespace std;
 
 
 
-Type  selectCharacter()
+Type  selectCharacter() //user chooses either orc or troll
 	{
 		string ans="";
 		Type player=Type::NONE;
 		while (player==Type::NONE)
 		{
-			cout<<"\n//////////\nSelect your character\nTroll - T\nOrc - O\n";
+			cout<<"\n--------------------\nSelect your character\n	Troll - T\n	Orc - O\n";
 			cin>>ans;
-			if(ans=="t"|| ans=="T")
+			if(ans=="t"|| ans=="T") //player chose troll
 			{
-				//cout<<"\nTroll\n";
 				player=Type::TROLL;
 			}
-			else if(ans=="o" || ans=="O")
+			else if(ans=="o" || ans=="O") //player chose orc
 			{
-				//cout<<"\nOrc\n";
 				player= Type::ORC;
 			}
-			else
+			else //error check
 			{
 				cout<<"\nYou have to choose Troll or Orc!\n";
 			}
 		}
-		return player;
+		return player; 
 	}
 
-	Type selectEnemy()
+	Type selectEnemy() //autochooses character type for enemy
 	{
-		Type enemy=static_cast<Type>((rand()%2)+1);
+		Type enemy=static_cast<Type>((rand()%2)+1); //troll or orc
 		
 		return enemy;
 	}
 
 	
-	void calculateHealth(Character* player, Character* enemy)
+	void calculateHealth(Character* player, Character* enemy) //calculates players and enemies health according to the game economy and displays them
 	{
 		if(player->getWeapon()->getWeaponType()==Attack::BAT)
 		{
-			if(enemy->getWeapon()->getWeaponType()==Attack::BAT)
+			if(enemy->getWeapon()->getWeaponType()==Attack::BAT) //bat vs bat
 			{
 				player->adjustHealth(-20);
 				enemy->adjustHealth(-20);
 			}
-			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD)
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD) //bat vs sword
 			{
 				player->adjustHealth(-30);
 			}
-			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD)
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD) //bat vs shield
 			{
 				player->adjustHealth(10);
 			}
 		}
 		else if(player->getWeapon()->getWeaponType()==Attack::SWORD)
 		{
-			if(enemy->getWeapon()->getWeaponType()==Attack::BAT)
+			if(enemy->getWeapon()->getWeaponType()==Attack::BAT) //sword vs bat
 			{
 				player->adjustHealth(20);
 			}
-			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD)
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD) //sword vs sword
 			{
 				player->adjustHealth(-10);
 				enemy->adjustHealth(-10);
 			}
-			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD)
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD) //sword vs shield
 			{
 				player->adjustHealth(30);
 			}
 		}
 		else if(player->getWeapon()->getWeaponType()==Attack::SHIELD)
 		{
-			if(enemy->getWeapon()->getWeaponType()==Attack::BAT)
+			if(enemy->getWeapon()->getWeaponType()==Attack::BAT) //shield vs bat
 			{
 				player->adjustHealth(10);
 			}
-			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD)
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SWORD) //shield vs sword
 			{
 				player->adjustHealth(-30);
 			}
-			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD)
+			else if(enemy->getWeapon()->getWeaponType()==Attack::SHIELD) //shield vs shield
 			{
 				player->adjustHealth(-10);
 				enemy->adjustHealth(-10);
 			}
 		}
+		
+		cout<<"\n~~~~~~~~~~~~~~~~~~~~\n";
 		cout<<"Player health: "<<player->getHealth()<<"\n";
 		cout<<"Enemy health: "<<enemy->getHealth()<<"\n";
-
+		cout<<"~~~~~~~~~~~~~~~~~~~~\n";
 
 	}
 
@@ -105,69 +105,68 @@ Type  selectCharacter()
 	{
 		Character* player=nullptr;
 		Character* enemy=nullptr;
-		Type playerType=selectCharacter();
+
+		Type playerType=selectCharacter(); //returns type of selected character by player
 		if(playerType==Type::TROLL)
 		{
-			player=&trollP;
-			cout<<"Congrats, you have chosen troll\n";
+			player=&trollP; //player plays as a troll
+			cout<<"\nCongrats, you have chosen TROLL\n";
 
 		}
 		else if(playerType==Type::ORC)
 		{
-			player=&orcP;
-			cout<<"Congrats, you have chosen orc\n";
+			player=&orcP; //player plays as an orc
+			cout<<"\nCongrats, you have chosen ORC\n";
 
 		}
 		
-		//player->getType();
-
-		Type enemyType=selectEnemy();
+		Type enemyType=selectEnemy(); //returns type of autoselected character
 		if(enemyType==Type::TROLL)
 		{
-			enemy=&trollE;
-			cout<<"Your enemy is troll\n";
+			enemy=&trollE; //enemy is troll
+			cout<<"Your enemy is TROLL\n";
 
 		}
 		else if(enemyType==Type::ORC)
 		{
-			enemy=&orcE;
-			cout<<"Your enemy is orc\n";
+			enemy=&orcE; //enemy is orc
+			cout<<"Your enemy is ORC\n";
 
 		}
-		//enemy->getType();
+		cout<<"--------------------\n";
 
-		int roundCounter=1;
-		while(player->getAlive() && enemy->getAlive())
+		int roundCounter=1; //counts the rounds
+		while(player->getAlive() && enemy->getAlive()) 
 		{
-			cout<<"\n/////\nROUND "<<roundCounter<<"\n";
+			cout<<"\n///////\nROUND "<<roundCounter<<"\n///////\n";
 			player->choose();
 			enemy->autoChoose();
 			player->increaseRoundWeapons();
 			enemy->increaseRoundWeapons();
-			player->getWeapon()->setUnusedRounds(0);
-			enemy->getWeapon()->setUnusedRounds(0);
-			calculateHealth(player, enemy);
+			player->getWeapon()->setUnusedRounds(0); //"this weapon has been used"
+			enemy->getWeapon()->setUnusedRounds(0); //"this weapon has been used"
+			calculateHealth(player, enemy); 
 			roundCounter++;
 		}
 
 		int ans;
-		if(player->getHealth()==enemy->getHealth())
+		if(player->getHealth()==enemy->getHealth()) //draw
 		{
-			cout<<"Draw :|\nDo you want to play again?\n Yes - 1\nNo - 2\n";
+			cout<<"Draw :|\nDo you want to play again?\n	Yes - 1\n	No - 2\n";
 			cin>>ans;
 		}
-		else if(player->getHealth()==0)
+		else if(player->getHealth()==0) //winner
 		{
-			cout<<"You have lost :(\nDo you want to play again?\nYes - 1\nNo - 2\n";
+			cout<<"You have lost :(\nDo you want to play again?\n	Yes - 1\n	No - 2\n";
 			cin>>ans;
 		}
-		else if(enemy->getHealth()==0)
+		else if(enemy->getHealth()==0) //loser
 		{
-			cout<<"You have won :)\nDo you want to play again?\nYes- 1\nNo - 2\n";
+			cout<<"You have won :)\nDo you want to play again?\n	Yes- 1\n	No - 2\n";
 			cin>>ans;
 		}
 
-		if(ans==1)
+		if(ans==1) //play again
 		{
 			player->adjustHealth(100); //alive again
 			enemy->adjustHealth(100);
@@ -177,7 +176,7 @@ Type  selectCharacter()
 
 
 int main() {
-	cout << "Let go virtual" << endl;
+	//cout << "Let go virtual" << endl;
 
 	// Uncomment and try to compile. Why are errors produced?
 	//Character character;
@@ -215,15 +214,15 @@ int main() {
 	
 	srand(time(nullptr));
 
-	//player
+	//player objects
 	Troll trollP;
 	Orc orcP;
 
-	//enemy
+	//enemy objects
 	Troll trollE;
 	Orc orcE;
 
-
+	//main game loop
 	play(trollP, orcP, trollE, orcE);
 
 	cin.get();

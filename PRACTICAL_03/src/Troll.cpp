@@ -4,6 +4,5 @@ void Troll::fly() { std::cout << "TROLL : Average Dooper is flapping and flying"
 
 Type Troll::getType()
 {
-    //std::cout<<"Troll\n";
     return Type::TROLL;
 }

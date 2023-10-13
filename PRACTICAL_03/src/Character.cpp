@@ -5,95 +5,102 @@
 void Character::flip() { std::cout << "CHARACTER : I know how to flip and I will flipping do it" << std::endl; }
 void Character::walk() { std::cout << "CHARACTER : Just in case they are too young to walk yet" << std::endl; }
 
-void Character::chooseWeapon()
+void Character::chooseWeapon() //player chooses their desired weapon
 {
 	int weapon;
-	std::cout<<"Bat - 1\nSword - 2\n";
+	std::cout<<"    Bat - 1\n    Sword - 2\n";
 	std::cin>>weapon;
-	if(weapon==1)
+	if(weapon==1) //bat
 	{
-		m_weapon= &m_bat;
+		m_weapon= &m_bat; //current weapon is bat
+        std::cout<<"\nYou have a BAT\n";
 	}
-	else if(weapon==2)
+	else if(weapon==2) //sword
 	{
-        
-        if(m_sword.canUse())
+        if(m_sword.canUse()) 
         {
-		    m_weapon=&m_sword;
+		    m_weapon=&m_sword; //current weapon is a sword
+            std::cout<<"\nYou have a SWORD\n";
+
         }
-        else
+        else 
         {
-            std::cout<<"The sword cooldown is 2 rounds. Current amount of unused rounds: "<<m_sword.getUnusedRounds()<<"\nChoose again\n";
+            std::cout<<"***The sword cooldown is 2 rounds. Current amount of unused rounds: "<<m_sword.getUnusedRounds()<<"***\n!!!Choose again!!!\n";
             choose();
         }
 	}
     else
     {
-        std::cout<<"You have to choose from these: \n";
+        std::cout<<"!!!You have to choose from these: \n";
         chooseWeapon();
     }
 }
 
-void Character::chooseBarrier()
+void Character::chooseBarrier() //player chooses their desired defence barrier
 {
     int barrier;
-	std::cout<<"Shield - 1\n";
+	std::cout<<"    Shield - 1\n";
 	std::cin>>barrier;
 	if(barrier==1)
 	{
         if(m_shield.canUse())
         {
-		    m_weapon=&m_shield;
+		    m_weapon=&m_shield; //player currently has a shield
+            std::cout<<"\nYou have a SHIELD\n";
         }
         else
         {
-            std::cout<<"The shield cooldown is 1 round. Current amount of unused rounds: "<<m_shield.getUnusedRounds()<<"\nChoose again\n";
+            std::cout<<"***The shield cooldown is 1 round. Current amount of unused rounds: "<<m_shield.getUnusedRounds()<<"***\n!!!Choose again!!!\n";
             choose();
         }
 	}
     else
     {
-        std::cout<<"You have to choose from these: \n";
+        std::cout<<"!!!You have to choose from these: \n";
         chooseBarrier();
     }
 	
 }
 
-void Character::choose()
+void Character::choose() //player chooses if they want to attack or defend
 {
     int ans;
 	std::cout<<"Attack or defend?\n";
-	std::cout<<"Attack - 1\nDefend - 2\n";
+	std::cout<<"    Attack - 1\n    Defend - 2\n";
 	std::cin>>ans;
     
-	if(ans==1)
+	if(ans==1) //attack
 	{
 		chooseWeapon();
 	}
-	else if(ans ==2)
+	else if(ans ==2) //defend 
 	{
         chooseBarrier();
 	}
+    else
+    {
+        std::cout<<"!!!Invalid input!!!\n";
+        choose();
+    }
 }
 
-void Character::autoChoose()
+void Character::autoChoose() //chooses current weapon automatically 
 {   
     Attack weapon=static_cast<Attack>(rand()%3); //chooses weapons or shield
-    std::cout<<"enemy weapon: "<<static_cast<int>(weapon)<<"\n";
     if(weapon==Attack::BAT)
     {
         m_weapon=&m_bat;
-        std::cout<<"Enemy has a bat\n";
+        std::cout<<"Enemy has a BAT\n";
     }
     else if(weapon==Attack::SWORD && m_sword.canUse())
     {
         m_weapon=&m_sword;
-        std::cout<<"Enemy has a sword\n";
+        std::cout<<"Enemy has a SWORD\n";
     }
     else if( weapon==Attack::SHIELD && m_shield.canUse())
     {
         m_weapon= &m_shield;
-        std::cout<<"Enemy has a shield\n";
+        std::cout<<"Enemy has a SHIELD\n";
 
     }
     else
@@ -110,25 +117,25 @@ bool Character::getAlive()
 
 
 
-void Character::adjustHealth(int t_value)
+void Character::adjustHealth(int t_value) //changes health after a round
 {
     if(m_health+t_value<100)
     {
         m_health=m_health+t_value;
     }
-    else if(m_health<100)
+    else if(m_health<100) //100 is max limit
     {
         m_health=100;
     }
 
-    if(m_health<=0)
+    if(m_health<=0) //0 is min limit
     {
         m_health=0;
-        m_alive=false;
+        m_alive=false; //character is dead
     }
     else
     {
-        m_alive=true;
+        m_alive=true; //possibility to set it back to alive when playing again
     }
 }
 
@@ -142,7 +149,7 @@ int Character::getHealth()
     return m_health;
 }
 
-void Character::increaseRoundWeapons()
+void Character::increaseRoundWeapons() //increases number of unused rounds for weapons
 {
     m_bat.increaseUnusedRounds();
     m_sword.increaseUnusedRounds();

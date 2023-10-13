@@ -1,11 +1,11 @@
 #include <./include/Weapon.h>
 
 Weapon::Weapon(int t_coolDown, int t_unusedRounds): m_coolDown(t_coolDown), m_unusedRounds(t_unusedRounds)
-{
+{//possible default construction
 
 }
 
-bool Weapon::canUse()
+bool Weapon::canUse() //checks if the weapon can be used, if enough rounds passed and the weapon cooled down
 {
     if(m_unusedRounds>=m_coolDown)
     {
