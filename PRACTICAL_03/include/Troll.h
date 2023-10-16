@@ -7,8 +7,10 @@
 
 class Troll : public Character{
 public:
-	void fly();			// implementation of pure virtual
+	void winMessage();			// implementation of pure virtual
+	void walkIntoFight();
 	Type getType();
+	void motivation(); //only avaliable in troll
 };
 
 #endif

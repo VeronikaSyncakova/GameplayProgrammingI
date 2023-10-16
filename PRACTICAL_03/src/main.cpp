@@ -46,7 +46,12 @@ Type  selectCharacter() //user chooses either orc or troll
 		}
 		else if(player->getWeapon()->getWeaponType()==Attack::AXE || enemy->getWeapon()->getWeaponType()==Attack::AXE) //axe
 		{
-			if(player->getWeapon()->getWeaponType()==Attack::AXE)
+			if (player->getWeapon()->getWeaponType()==Attack::AXE && enemy->getWeapon()->getWeaponType()==Attack::AXE)
+			{
+				player->adjustHealth(-30);
+				enemy->adjustHealth(-30);
+			}
+			else if(player->getWeapon()->getWeaponType()==Attack::AXE)
 			{
 				enemy->adjustHealth(-30);
 			}
@@ -111,6 +116,30 @@ Type  selectCharacter() //user chooses either orc or troll
 
 	}
 
+	void specialAbility(Character* player)
+	{
+		if (player->getType()==Type::ORC)
+		{
+			string ans="";
+			cout<<"Press K for energy before fight. Press anyother key if you don't want to be energised\n";
+			cin>>ans;
+			if(ans=="k" || ans=="K")
+			{
+				((Orc*)player)->barrelRoll();
+			}
+		}
+		else if(player->getType()==Type::TROLL)
+		{
+			string ans="";
+			cout<<"Press K for motivation before fight. Press any other key if you don't want to be motivated\n";
+			cin>>ans;
+			if(ans=="k" || ans=="K")
+			{
+				((Troll*)player)->motivation();
+			}
+		}
+	}
+
 	
 
 	
@@ -131,8 +160,10 @@ Type  selectCharacter() //user chooses either orc or troll
 		{
 			player=&orcP; //player plays as an orc
 			cout<<"\nCongrats, you have chosen ORC\n";
+			
 
 		}
+		player->walkIntoFight(); //specific character message
 		
 		Type enemyType=selectEnemy(); //returns type of autoselected character
 		if(enemyType==Type::TROLL)
@@ -147,12 +178,14 @@ Type  selectCharacter() //user chooses either orc or troll
 			cout<<"Your enemy is ORC\n";
 
 		}
+		enemy->walkIntoFight(); //specific character message
 		cout<<"--------------------\n";
 
 		int roundCounter=1; //counts the rounds
 		while(player->getAlive() && enemy->getAlive()) 
 		{
 			cout<<"\n///////\nROUND "<<roundCounter<<"\n///////\n";
+			specialAbility(player);
 			player->choose();
 			enemy->autoChoose();
 			player->increaseRoundWeapons();
@@ -171,11 +204,13 @@ Type  selectCharacter() //user chooses either orc or troll
 		}
 		else if(player->getHealth()==0) //winner
 		{
+			enemy->winMessage();
 			cout<<"You have lost :(\nDo you want to play again?\n	Yes - 1\n	No - 2\n";
 			cin>>ans;
 		}
 		else if(enemy->getHealth()==0) //loser
 		{
+			player->winMessage();
 			cout<<"You have won :)\nDo you want to play again?\n	Yes- 1\n	No - 2\n";
 			cin>>ans;
 		}

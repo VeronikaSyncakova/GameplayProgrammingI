@@ -8,8 +8,8 @@ class Orc : public Character{
 
 public:
 	void barrelRoll(); 	// Method only available in Orc
-	void walk(); 		// Specific implementation of walk()
-	void fly(); 		// implementation of pure virtual
+	void walkIntoFight(); 		// Specific implementation of walk()
+	void winMessage(); 		// implementation of pure virtual
 	Type getType(); 
 };
 
