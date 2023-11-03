@@ -3,6 +3,7 @@
 
 #include <./include/Player.h>
 #include <./include/NPC.h>
+#include <./include/Circle.h>
 
 class Game
 {

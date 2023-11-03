@@ -6,6 +6,8 @@ using namespace sf;
 #define CUTE_C2_IMPLEMENTATION
 #include <./include/cute_c2.h>
 
+
+
 sf::RenderWindow* window = new RenderWindow(sf::VideoMode(800, 600), "Launching...");
 
 
