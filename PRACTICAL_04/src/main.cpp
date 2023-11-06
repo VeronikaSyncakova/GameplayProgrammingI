@@ -4,8 +4,19 @@
 #include <string>
 #include <./include/Circle.h>
 #include <./include/Rectangle.h>
+#include <math.h>
 
 using namespace std;
+
+//m_displacementX=target.x-coordinates.x;
+//m_displacementY=target.y-coordinates.y;
+//m_displacementX /= sqrtf(m_displacementX*m_displacementX + m_displacementY*m_displacementY);
+//m_displacementY /= sqrtf(m_displacementX*m_displacementX + m_displacementY*m_displacementY);
+//m_displacementX*=1 (speed)
+//m_displacementY*=1 (speed)
+
+
+
 
 typedef struct Position
 {
@@ -51,7 +62,7 @@ struct Missile
 
 	bool armed;
 
-	void setColliderPosition()
+	void setColliderPosition() //sets position of colliders
 	{
 		colliderC.setPosition(coordinates.x,coordinates.y);
 		colliderR.setPosition(coordinates.x,coordinates.y);
@@ -67,8 +78,16 @@ struct Missile
 
 	void update()
 	{
-		coordinates.x += 1;
-		coordinates.y += 2;
+		const float SPEED=1;
+		float displacementX=target.coordinates.x-coordinates.x;
+		float displacementY=target.coordinates.y-coordinates.y;
+		displacementX /= sqrtf(displacementX*displacementX + displacementY*displacementY);
+		displacementY /= sqrtf(displacementX*displacementX + displacementY*displacementY);
+		displacementX*=SPEED; //(speed)
+		displacementY*=SPEED; //(speed)
+		coordinates.x += displacementX;
+		coordinates.y += displacementY;
+		setColliderPosition();
 	}
 
 	void selectWarhead() //select warhead type
@@ -187,6 +206,30 @@ struct Missile
 		return collision;
 
 	}
+
+	bool checkCollisionColliders(Target* e) //checks for collision betweencolliders
+	{
+		bool collision=false;
+		if(payload==EXPLOSIVE)
+		{
+			if(colliderC.circle2circle(e->colliderC))
+			{
+				cout<<"circle collision\n";
+				collision=true;
+			}
+		}
+		else if(payload==NUCLEAR)
+		{
+			if(colliderR.rectangle2rectangle(e->colliderR))
+			{
+				cout<<"rectangle collision\n";
+				collision=true;
+			}
+		}
+
+		return collision;
+	}
+
 	bool viable() //checks if the coordinates are within the playing area
 	{
 		if (coordinates.x<0 || coordinates.x>6 || coordinates.y<0 || coordinates.y>6) //coordinates outside of the area
@@ -250,6 +293,11 @@ int main()
 			{
 				m->fire();
 			}
+		}
+
+		while (!m->checkCollisionColliders(e))
+		{
+			m->update();
 		}
 
 		//check collision and destroy the target
