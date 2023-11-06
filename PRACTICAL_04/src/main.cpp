@@ -51,6 +51,12 @@ struct Missile
 
 	bool armed;
 
+	void setColliderPosition()
+	{
+		colliderC.setPosition(coordinates.x,coordinates.y);
+		colliderR.setPosition(coordinates.x,coordinates.y);
+	}
+
 	void arm()
 	{
 		if (armed)
@@ -103,6 +109,7 @@ struct Missile
 		{
 			coordinates.x=x;
 			coordinates.y=y;
+			
 			launchCode();
 		}
 	}
