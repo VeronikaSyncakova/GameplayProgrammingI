@@ -22,3 +22,9 @@ bool Circle::circle2circle(Circle t_enemy)
     }
     return false;
 }
+
+void Circle::setPosition(float t_x, float t_y)
+{
+    m_x=t_x;
+    m_y=t_y;
+}

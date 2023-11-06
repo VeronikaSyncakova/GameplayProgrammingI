@@ -4,6 +4,8 @@
 #include <./include/Player.h>
 #include <./include/NPC.h>
 #include <./include/Circle.h>
+#include <./include/Rectangle.h>
+
 
 class Game
 {
