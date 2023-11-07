@@ -5,6 +5,7 @@
 #include <./include/Circle.h>
 #include <./include/Rectangle.h>
 #include <math.h>
+#include <SFML/Graphics.hpp>
 
 using namespace std;
 
@@ -20,8 +21,8 @@ using namespace std;
 
 typedef struct Position
 {
-	int x;
-	int y;
+	int x=0;
+	int y=0;
 	void
 	print()
 	{
@@ -53,6 +54,7 @@ struct Missile
 {
 	WarHead payload;
 	Coordinates coordinates;
+	Coordinates position;
 	Circle colliderC;
 	Rectangle colliderR;
 	Target target;
@@ -64,8 +66,8 @@ struct Missile
 
 	void setColliderPosition() //sets position of colliders
 	{
-		colliderC.setPosition(coordinates.x,coordinates.y);
-		colliderR.setPosition(coordinates.x,coordinates.y);
+		colliderC.setPosition(position.x,position.y);
+		colliderR.setPosition(position.x,position.y);
 	}
 
 	void arm()
@@ -79,16 +81,17 @@ struct Missile
 	void update()
 	{
 		const float SPEED=1;
-		float displacementX=target.coordinates.x-coordinates.x;
-		float displacementY=target.coordinates.y-coordinates.y;
+		float displacementX=coordinates.x-position.x;
+		float displacementY=coordinates.y-position.y;
 		displacementX /= sqrtf(displacementX*displacementX + displacementY*displacementY);
 		displacementY /= sqrtf(displacementX*displacementX + displacementY*displacementY);
 		displacementX*=SPEED; //(speed)
 		displacementY*=SPEED; //(speed)
-		coordinates.x += displacementX;
-		coordinates.y += displacementY;
+		position.x += displacementX;
+		position.y += displacementY;
 		setColliderPosition();
 	}
+
 
 	void selectWarhead() //select warhead type
 	{
@@ -243,10 +246,33 @@ struct Missile
 	}
 };
 
+void openWindow(Missile* m, Enemy* e)
+	{
+		sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Launching...");
+		window->setSize(sf::Vector2u(640, 480));
+		window->setTitle("Game");
+
+		while(window->isOpen())
+		{
+			/*sf::Event event;
+		while (window->pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window->close();
+			}
+		}*/
+			while (!m->checkCollisionColliders(e))
+			{
+				m->update();
+			}
+			window->close();
+		}
+	}
 
 int main()
 {
-
+	
 	// Create a new Enemy
 	Enemy *e = new Enemy();
 
@@ -295,10 +321,12 @@ int main()
 			}
 		}
 
+		openWindow(m,e);
+		/*
 		while (!m->checkCollisionColliders(e))
 		{
 			m->update();
-		}
+		}*/
 
 		//check collision and destroy the target
 		if(m->checkCollision())

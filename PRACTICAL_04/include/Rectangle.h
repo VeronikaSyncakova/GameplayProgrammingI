@@ -4,7 +4,7 @@
 class Rectangle 
 {
 public:
-    Rectangle(float t_x=0, float t_y=0, float t_width=5, float t_height=5);
+    Rectangle(float t_x=0, float t_y=0, float t_width=1, float t_height=1);
     bool rectangle2rectangle(Rectangle t_enemy);
     void setPosition(float t_x,float t_y);
 
