@@ -21,8 +21,8 @@ using namespace std;
 
 typedef struct Position
 {
-	int x=0;
-	int y=0;
+	float x=0;
+	float y=0;
 	void
 	print()
 	{
@@ -53,7 +53,7 @@ typedef struct Enemy
 struct Missile
 {
 	WarHead payload;
-	Coordinates coordinates;
+	Target coordinates;
 	Coordinates position;
 	Circle colliderC;
 	Rectangle colliderR;
@@ -81,14 +81,18 @@ struct Missile
 	void update()
 	{
 		const float SPEED=1;
-		float displacementX=coordinates.x-position.x;
-		float displacementY=coordinates.y-position.y;
+		float displacementX=coordinates.coordinates.x-position.x;
+		float displacementY=coordinates.coordinates.y-position.y;
+		//std::cout<<"displacementX before sqrt: "<<displacementX<<"\n";
 		displacementX /= sqrtf(displacementX*displacementX + displacementY*displacementY);
 		displacementY /= sqrtf(displacementX*displacementX + displacementY*displacementY);
+		//std::cout<<"displacementX after sqrt: "<<displacementX<<"\n";
 		displacementX*=SPEED; //(speed)
 		displacementY*=SPEED; //(speed)
+		//std::cout<<"position X before displacement: "<<position.x<<"\n";
 		position.x += displacementX;
 		position.y += displacementY;
+		//std::cout<<"position X after displacement: "<<position.x<<"\n";
 		setColliderPosition();
 	}
 
@@ -129,9 +133,9 @@ struct Missile
 		}
 		else //user fires 
 		{
-			coordinates.x=x;
-			coordinates.y=y;
-			
+			coordinates.coordinates.x=x;
+			coordinates.coordinates.y=y;
+			coordinates.setColliderPosition();
 			launchCode();
 		}
 	}
@@ -179,15 +183,15 @@ struct Missile
 		bool collision=false; //if collision is succesfull
 		if (payload==EXPLOSIVE) //hit area is 1x1
 		{
-			if( target.coordinates.x==coordinates.x && target.coordinates.y==coordinates.y)
+			if( target.coordinates.x==coordinates.coordinates.x && target.coordinates.y==coordinates.coordinates.y)
 			{
 				collision= true;
 			}
 		}
 		else //hit area is 1 pixel to each side 
 		{
-			int radiusX[]={coordinates.x-1,coordinates.x, coordinates.x+1}; //hit areas for x
-			int radiusY[]={coordinates.y-1,coordinates.y, coordinates.y+1}; //hit areas for y
+			int radiusX[]={coordinates.coordinates.x-1,coordinates.coordinates.x, coordinates.coordinates.x+1}; //hit areas for x
+			int radiusY[]={coordinates.coordinates.y-1,coordinates.coordinates.y, coordinates.coordinates.y+1}; //hit areas for y
 			bool collisionX=false; //collision on x
 			bool collisionY=false; //collision on y
 			for (int i=0; i<3;i++)
@@ -210,22 +214,34 @@ struct Missile
 
 	}
 
-	bool checkCollisionColliders(Target* e) //checks for collision betweencolliders
+	bool checkCollisionColliders() //checks for collision betweencolliders
 	{
 		bool collision=false;
 		if(payload==EXPLOSIVE)
 		{
-			if(colliderC.circle2circle(e->colliderC))
+			if(colliderC.circle2circle(target.colliderC))
 			{
 				cout<<"circle collision\n";
+				collision=true;
+			}
+			else if(colliderC.circle2circle(coordinates.colliderC))
+			{
+				//std::cout<<"target.colliderC X: "<<target.colliderC.getX()<<"\n";
+				//std::cout<<"coordinates.colliderC X: "<<coordinates.colliderC.getX()<<"\n";
+				cout<<"arrived at target\n";
 				collision=true;
 			}
 		}
 		else if(payload==NUCLEAR)
 		{
-			if(colliderR.rectangle2rectangle(e->colliderR))
+			if(colliderR.rectangle2rectangle(target.colliderR))
 			{
 				cout<<"rectangle collision\n";
+				collision=true;
+			}
+			else if(colliderR.rectangle2rectangle(coordinates.colliderR))
+			{
+				cout<<"arrived at target\n";
 				collision=true;
 			}
 		}
@@ -235,7 +251,7 @@ struct Missile
 
 	bool viable() //checks if the coordinates are within the playing area
 	{
-		if (coordinates.x<0 || coordinates.x>6 || coordinates.y<0 || coordinates.y>6) //coordinates outside of the area
+		if (coordinates.coordinates.x<0 || coordinates.coordinates.x>6 || coordinates.coordinates.y<0 || coordinates.coordinates.y>6) //coordinates outside of the area
 		{
 			return true;
 		}
@@ -262,7 +278,7 @@ void openWindow(Missile* m, Enemy* e)
 				window->close();
 			}
 		}*/
-			while (!m->checkCollisionColliders(e))
+			while (!m->checkCollisionColliders())
 			{
 				m->update();
 			}
@@ -306,6 +322,7 @@ int main()
 
 		// Set Missile Target by dereferencing Enemy pointer
 		m->target = *e;
+		m->target.setColliderPosition();
 		//Acquire target
 		m->acquireTarget();
 
@@ -343,6 +360,9 @@ int main()
 			}
 			else{
 				cout<<":: Missed, try again! ::\n\n";
+				m->position.x=0;
+				m->position.y=0;
+				m->setColliderPosition();
 			}
 		}
 	}

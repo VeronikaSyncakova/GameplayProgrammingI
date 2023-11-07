@@ -12,10 +12,10 @@ bool Circle::circle2circle(Circle t_enemy)
     float x= (m_x-t_enemy.getX()) * (m_x-t_enemy.getX());
     float y= (m_y-t_enemy.getY()) * (m_y-t_enemy.getY());
     float distance= sqrtf(x+y);
-    std::cout<<x<<"\n";
-    std::cout<<distance<<"\n";
+    //std::cout<<x<<"\n";
+    //std::cout<<distance<<"\n";
 
-    if (distance<=radius)
+    if (distance<radius)
     {
         std::cout<<"collision\n";
         return true;
