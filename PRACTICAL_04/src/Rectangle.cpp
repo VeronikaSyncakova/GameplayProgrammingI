@@ -13,7 +13,7 @@ bool Rectangle::rectangle2rectangle(Rectangle t_enemy)
     m_y+m_height>=t_enemy.m_y &&
     m_y<=t_enemy.m_y+t_enemy.m_height)
     {
-        std::cout<<"collision rect\n";
+        //std::cout<<"collision rect\n";
         return true;
     }
     else

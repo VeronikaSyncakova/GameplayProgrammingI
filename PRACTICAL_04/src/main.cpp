@@ -56,7 +56,8 @@ struct Missile
 	Target coordinates;
 	Coordinates position;
 	Circle colliderC;
-	Rectangle colliderR;
+	Rectangle colliderRV=Rectangle(0,0,1,3); //vertical collider
+	Rectangle colliderRH=Rectangle(0,0,3,1); //horizontal collider
 	Target target;
 	
 	//launch code
@@ -67,7 +68,8 @@ struct Missile
 	void setColliderPosition() //sets position of colliders
 	{
 		colliderC.setPosition(position.x,position.y);
-		colliderR.setPosition(position.x,position.y);
+		colliderRV.setPosition(position.x,position.y-1);
+		colliderRH.setPosition(position.x-1,position.y);
 	}
 
 	void arm()
@@ -183,15 +185,16 @@ struct Missile
 		bool collision=false; //if collision is succesfull
 		if (payload==EXPLOSIVE) //hit area is 1x1
 		{
-			if( target.coordinates.x==coordinates.coordinates.x && target.coordinates.y==coordinates.coordinates.y)
+			if( (target.coordinates.x==coordinates.coordinates.x && target.coordinates.y==coordinates.coordinates.y)
+				|| colliderC.circle2circle(target.colliderC))
 			{
 				collision= true;
 			}
 		}
 		else //hit area is 1 pixel to each side 
 		{
-			int radiusX[]={coordinates.coordinates.x-1,coordinates.coordinates.x, coordinates.coordinates.x+1}; //hit areas for x
-			int radiusY[]={coordinates.coordinates.y-1,coordinates.coordinates.y, coordinates.coordinates.y+1}; //hit areas for y
+			float radiusX[]={coordinates.coordinates.x-1,coordinates.coordinates.x, coordinates.coordinates.x+1}; //hit areas for x
+			float radiusY[]={coordinates.coordinates.y-1,coordinates.coordinates.y, coordinates.coordinates.y+1}; //hit areas for y
 			bool collisionX=false; //collision on x
 			bool collisionY=false; //collision on y
 			for (int i=0; i<3;i++)
@@ -204,7 +207,7 @@ struct Missile
 				{
 					collisionY=true;
 				}
-				if(collisionX && collisionY) // general collision 
+				if((collisionX && collisionY) || (colliderRV.rectangle2rectangle(target.colliderR)|| colliderRH.rectangle2rectangle(target.colliderR))) // general collision 
 				{
 					collision=true;
 				}
@@ -228,20 +231,20 @@ struct Missile
 			{
 				//std::cout<<"target.colliderC X: "<<target.colliderC.getX()<<"\n";
 				//std::cout<<"coordinates.colliderC X: "<<coordinates.colliderC.getX()<<"\n";
-				cout<<"arrived at target\n";
+				//cout<<"arrived at target\n";
 				collision=true;
 			}
 		}
 		else if(payload==NUCLEAR)
 		{
-			if(colliderR.rectangle2rectangle(target.colliderR))
+			if(colliderRV.rectangle2rectangle(target.colliderR)|| colliderRH.rectangle2rectangle(target.colliderR))
 			{
 				cout<<"rectangle collision\n";
 				collision=true;
 			}
-			else if(colliderR.rectangle2rectangle(coordinates.colliderR))
+			else if(colliderRV.rectangle2rectangle(coordinates.colliderR) || colliderRH.rectangle2rectangle(target.colliderR))
 			{
-				cout<<"arrived at target\n";
+				//cout<<"arrived at target\n";
 				collision=true;
 			}
 		}

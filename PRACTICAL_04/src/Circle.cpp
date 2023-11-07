@@ -17,7 +17,7 @@ bool Circle::circle2circle(Circle t_enemy)
 
     if (distance<radius)
     {
-        std::cout<<"collision\n";
+        //std::cout<<"collision circle\n";
         return true;
     }
     return false;
@@ -27,8 +27,8 @@ void Circle::setPosition(float t_x, float t_y)
 {
     m_x=t_x;
     m_y=t_y;
-    std::cout<<"position x: "<<m_x<<"\n";
-    std::cout<<"position y: "<<m_y<<"\n";
+    //std::cout<<"position x: "<<m_x<<"\n";
+    //std::cout<<"position y: "<<m_y<<"\n";
 }
 
 float Circle::getX()
