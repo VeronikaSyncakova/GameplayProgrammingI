@@ -53,12 +53,12 @@ typedef struct Enemy
 struct Missile
 {
 	WarHead payload;
-	Target coordinates;
+	Target aimTarget;
 	Coordinates position;
 	Circle colliderC;
 	Rectangle colliderRV=Rectangle(0,0,1,3); //vertical collider
 	Rectangle colliderRH=Rectangle(0,0,3,1); //horizontal collider
-	Target target;
+	Target enemy;
 	
 	//launch code
 	string const LAUNCH_CODE="fire";
@@ -83,8 +83,8 @@ struct Missile
 	void update()
 	{
 		const float SPEED=1;
-		float displacementX=coordinates.coordinates.x-position.x;
-		float displacementY=coordinates.coordinates.y-position.y;
+		float displacementX=aimTarget.coordinates.x-position.x;
+		float displacementY=aimTarget.coordinates.y-position.y;
 		//std::cout<<"displacementX before sqrt: "<<displacementX<<"\n";
 		displacementX /= sqrtf(displacementX*displacementX + displacementY*displacementY);
 		displacementY /= sqrtf(displacementX*displacementX + displacementY*displacementY);
@@ -135,9 +135,9 @@ struct Missile
 		}
 		else //user fires 
 		{
-			coordinates.coordinates.x=x;
-			coordinates.coordinates.y=y;
-			coordinates.setColliderPosition();
+			aimTarget.coordinates.x=x;
+			aimTarget.coordinates.y=y;
+			aimTarget.setColliderPosition();
 			launchCode();
 		}
 	}
@@ -185,29 +185,29 @@ struct Missile
 		bool collision=false; //if collision is succesfull
 		if (payload==EXPLOSIVE) //hit area is 1x1
 		{
-			if( (target.coordinates.x==coordinates.coordinates.x && target.coordinates.y==coordinates.coordinates.y)
-				|| colliderC.circle2circle(target.colliderC))
+			if( (enemy.coordinates.x==aimTarget.coordinates.x && enemy.coordinates.y==aimTarget.coordinates.y)
+				|| colliderC.circle2circle(enemy.colliderC))
 			{
 				collision= true;
 			}
 		}
 		else //hit area is 1 pixel to each side 
 		{
-			float radiusX[]={coordinates.coordinates.x-1,coordinates.coordinates.x, coordinates.coordinates.x+1}; //hit areas for x
-			float radiusY[]={coordinates.coordinates.y-1,coordinates.coordinates.y, coordinates.coordinates.y+1}; //hit areas for y
+			float radiusX[]={aimTarget.coordinates.x-1,aimTarget.coordinates.x, aimTarget.coordinates.x+1}; //hit areas for x
+			float radiusY[]={aimTarget.coordinates.y-1,aimTarget.coordinates.y, aimTarget.coordinates.y+1}; //hit areas for y
 			bool collisionX=false; //collision on x
 			bool collisionY=false; //collision on y
 			for (int i=0; i<3;i++)
 			{
-				if( target.coordinates.x==radiusX[i] ) //collision on x
+				if( enemy.coordinates.x==radiusX[i] ) //collision on x
 				{
 					collisionX= true;
 				}
-				if(target.coordinates.y==radiusY[i]) //collision on y
+				if(enemy.coordinates.y==radiusY[i]) //collision on y
 				{
 					collisionY=true;
 				}
-				if((collisionX && collisionY) || (colliderRV.rectangle2rectangle(target.colliderR)|| colliderRH.rectangle2rectangle(target.colliderR))) // general collision 
+				if((collisionX && collisionY) || (colliderRV.rectangle2rectangle(enemy.colliderR)|| colliderRH.rectangle2rectangle(enemy.colliderR))) // general collision 
 				{
 					collision=true;
 				}
@@ -222,12 +222,12 @@ struct Missile
 		bool collision=false;
 		if(payload==EXPLOSIVE)
 		{
-			if(colliderC.circle2circle(target.colliderC))
+			if(colliderC.circle2circle(enemy.colliderC))
 			{
-				cout<<"circle collision\n";
+				cout<<"circle collision at ["<<colliderC.getX()<<", "<<colliderC.getY()<<"]\n";
 				collision=true;
 			}
-			else if(colliderC.circle2circle(coordinates.colliderC))
+			else if(colliderC.circle2circle(aimTarget.colliderC))
 			{
 				//std::cout<<"target.colliderC X: "<<target.colliderC.getX()<<"\n";
 				//std::cout<<"coordinates.colliderC X: "<<coordinates.colliderC.getX()<<"\n";
@@ -237,12 +237,12 @@ struct Missile
 		}
 		else if(payload==NUCLEAR)
 		{
-			if(colliderRV.rectangle2rectangle(target.colliderR)|| colliderRH.rectangle2rectangle(target.colliderR))
+			if(colliderRV.rectangle2rectangle(enemy.colliderR)|| colliderRH.rectangle2rectangle(enemy.colliderR))
 			{
 				cout<<"rectangle collision\n";
 				collision=true;
 			}
-			else if(colliderRV.rectangle2rectangle(coordinates.colliderR) || colliderRH.rectangle2rectangle(target.colliderR))
+			else if(colliderRV.rectangle2rectangle(aimTarget.colliderR) || colliderRH.rectangle2rectangle(enemy.colliderR))
 			{
 				//cout<<"arrived at target\n";
 				collision=true;
@@ -254,7 +254,7 @@ struct Missile
 
 	bool viable() //checks if the coordinates are within the playing area
 	{
-		if (coordinates.coordinates.x<0 || coordinates.coordinates.x>6 || coordinates.coordinates.y<0 || coordinates.coordinates.y>6) //coordinates outside of the area
+		if (aimTarget.coordinates.x<0 || aimTarget.coordinates.x>6 || aimTarget.coordinates.y<0 || aimTarget.coordinates.y>6) //coordinates outside of the area
 		{
 			return true;
 		}
@@ -265,7 +265,7 @@ struct Missile
 	}
 };
 
-void openWindow(Missile* m, Enemy* e)
+void openWindow(Missile* m)
 	{
 		sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(800, 600), "Launching...");
 		window->setSize(sf::Vector2u(640, 480));
@@ -324,8 +324,8 @@ int main()
 		m->selectWarhead();
 
 		// Set Missile Target by dereferencing Enemy pointer
-		m->target = *e;
-		m->target.setColliderPosition();
+		m->enemy = *e;
+		m->enemy.setColliderPosition();
 		//Acquire target
 		m->acquireTarget();
 
@@ -341,7 +341,7 @@ int main()
 			}
 		}
 
-		openWindow(m,e);
+		openWindow(m);
 		/*
 		while (!m->checkCollisionColliders(e))
 		{
