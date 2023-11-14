@@ -15,13 +15,16 @@ sf::Texture npc_texture;
 sf::Sprite player_sprite;
 sf::Sprite npc_sprite;
 
+
 Game::Game(){}
 
 void Game::initialize()
 {
 	player = new Player();
 	npc = new NPC();
-
+	circleP= new Circle();
+	circleE= new Circle();
+	currentGameState=GameState::BOUNDING;
 	window->setSize(sf::Vector2u(640, 480));
 	window->setTitle("Game");
 
@@ -39,6 +42,11 @@ void Game::initialize()
 
 	player->initialize();
 	npc->initialize();
+	circleP->initialize(50,sf::Color::Red);
+	circleE->initialize(50,sf::Color::Yellow);
+	circleE->body.setPosition(sf::Vector2f(400,300));
+	circleE->x=400;
+	circleE->y=300;
 
 	/*player_texture.loadFromFile(".//images//player//Player.png");
 	npc_texture.loadFromFile(".//images//npc//npc.png");
@@ -91,23 +99,108 @@ void Game::update()
 			cout << "No Collision" << endl;
 			player->m_sprite.setColor(sf::Color::White);
 			player->m_boundingBox.setOutlineColor(sf::Color::Green);
-
 		}
 
+		//circle to circle setup
+		c2circleCollision();
+
+
 		// Move the player
-		player->m_sprite.move(sf::Vector2f(1.0f, 1.0f));
-		player->m_boundingBox.setPosition(player->m_sprite.getPosition());
+		if(event.type== sf::Event::KeyPressed)
+		{
+			if (sf::Keyboard::Up == event.key.code)
+			{
+				player->moveUp();
+				circleP->moveUp();
+			}
+			else if (sf::Keyboard::Down == event.key.code)
+			{
+				player->moveDown();
+				circleP->moveDown();
+			}
+			else if (sf::Keyboard::Right == event.key.code)
+			{
+				player->moveRight();
+				circleP->moveRight();
+			}
+			else if (sf::Keyboard::Left == event.key.code)
+			{
+				player->moveLeft();
+				circleP->moveLeft();
+			}
+		}
+		if(event.type==sf::Event::KeyReleased)
+		{
+			if(sf::Keyboard::Q==event.key.code)
+			{
+				currentGameState=GameState::BOUNDING;
+			}
+			else if(sf::Keyboard::W==event.key.code)
+			{
+				currentGameState=GameState::C2CIRCLE;
+			}
+			else if(sf::Keyboard::E==event.key.code)
+			{
+				currentGameState=GameState::C2CAPSULE;
+			}
+			else if(sf::Keyboard::R==event.key.code)
+			{
+				currentGameState=GameState::C2AABB;
+			}
+			else if(sf::Keyboard::T==event.key.code)
+			{
+				currentGameState=GameState::C2RAY;
+			}
+		}
 	}
 
 }
 
+void Game::c2circleCollision()
+{
+	c2Circle circle_circleP;
+	circle_circleP.p=c2V(circleP->x,circleP->y);
+	circle_circleP.r=circleP->r;
+
+	c2Circle circle_circleE;
+	circle_circleE.p=c2V(circleE->x,circleE->y);
+	circle_circleE.r=circleE->r;
+
+	if(c2CircletoCircle(circle_circleP, circle_circleE))
+	{
+		cout << "Circles are in Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Blue);
+	} 
+	else
+	{
+		cout << "No Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Red);
+	}
+}
+
+
 void Game::draw()
 {
 	window->clear();
-	window->draw(player->m_boundingBox);
-
-	window->draw(player->m_sprite);
-	window->draw(npc->m_sprite);
+	switch(currentGameState)
+	{
+		case GameState::BOUNDING:
+			window->draw(player->m_boundingBox);
+			window->draw(player->m_sprite);
+			window->draw(npc->m_sprite);
+			break;
+		case GameState::C2CIRCLE:
+			window->draw(circleP->body);
+			window->draw(circleE->body);
+			break;
+		case GameState::C2CAPSULE:
+			break;
+		case GameState::C2AABB:
+			break;
+		case GameState::C2RAY:
+			break;
+	}
+	
 	//window->draw(player->m_boundingBox);
 	//player->draw();
 	//npc->draw();

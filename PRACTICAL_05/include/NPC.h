@@ -14,5 +14,9 @@ public:
 	void initialize();
 	void update();
 	void draw();
+
+	sf::RectangleShape m_boundingBox;
+	sf::Sprite m_sprite;
+	sf::Texture m_texture;
 };
 #endif

@@ -1,17 +1,17 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef CIRCLE_H
+#define CIRCLE_H
 
 #include <iostream>
 #include <./include/GameObject.h>
 
 using namespace std;
 
-class Player : public GameObject
+class Circle : public GameObject
 {
 public:
-	Player();
-	~Player();
-	void initialize();
+	Circle();
+	~Circle();
+	void initialize(int t_radius, sf::Color color);
 	void update();
 	void draw();
 	void moveUp();
@@ -19,9 +19,6 @@ public:
 	void moveRight();
 	void moveLeft();
 
-	sf::RectangleShape m_boundingBox;
-	sf::Sprite m_sprite;
-	sf::Texture m_texture;
-	
+	sf::CircleShape body;
 };
 #endif

@@ -21,8 +21,6 @@ public:
 	float w; // width
 	float h; // height
 	float r; // radius
-	sf::RectangleShape m_boundingBox;;
-	sf::Sprite m_sprite;
-	sf::Texture m_texture;
+	
 };
 #endif

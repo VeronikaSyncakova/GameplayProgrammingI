@@ -3,6 +3,10 @@
 
 #include <./include/Player.h>
 #include <./include/NPC.h>
+#include <./include/Circle.h>
+
+
+enum class GameState{BOUNDING,C2CIRCLE,C2CAPSULE,C2AABB,C2RAY};
 
 class Game
 {
@@ -13,8 +17,12 @@ class Game
 		void initialize();
 		void update();
 		void draw();
+		void c2circleCollision();
 		Player* player;
 		NPC* npc;
+		Circle* circleP;
+		Circle* circleE;
+		GameState currentGameState;
 };
 
 #endif
