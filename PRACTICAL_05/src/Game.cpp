@@ -15,6 +15,9 @@ sf::Texture npc_texture;
 sf::Sprite player_sprite;
 sf::Sprite npc_sprite;
 
+sf::RectangleShape line;
+
+
 
 Game::Game(){}
 
@@ -47,6 +50,9 @@ void Game::initialize()
 	circleE->body.setPosition(sf::Vector2f(400,300));
 	circleE->x=400;
 	circleE->y=300;
+
+	line.setSize(sf::Vector2f(250.0f,5.0f));
+	line.setPosition(200.0f,300.0f);
 
 	/*player_texture.loadFromFile(".//images//player//Player.png");
 	npc_texture.loadFromFile(".//images//npc//npc.png");
@@ -101,8 +107,11 @@ void Game::update()
 			player->m_boundingBox.setOutlineColor(sf::Color::Green);
 		}
 
-		//circle to circle setup
+		//circle to circle setup and collision check
 		c2circleCollision();
+
+		//c2 capsule setup and collision check
+		c2capsuleCollision();
 
 
 		// Move the player
@@ -156,7 +165,7 @@ void Game::update()
 
 }
 
-void Game::c2circleCollision()
+void Game::c2circleCollision() //c2circle to circle collision
 {
 	c2Circle circle_circleP;
 	circle_circleP.p=c2V(circleP->x,circleP->y);
@@ -169,6 +178,29 @@ void Game::c2circleCollision()
 	if(c2CircletoCircle(circle_circleP, circle_circleE))
 	{
 		cout << "Circles are in Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Blue);
+	} 
+	else
+	{
+		cout << "No Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Red);
+	}
+}
+
+void Game::c2capsuleCollision()
+{
+	c2Circle circle_circleP;
+	circle_circleP.p=c2V(circleP->x,circleP->y);
+	circle_circleP.r=circleP->r;
+
+	c2Capsule capsule_line;
+	capsule_line.a=c2V(line.getPosition().x,line.getPosition().y);
+	capsule_line.b=c2V(line.getGlobalBounds().width,line.getGlobalBounds().height);
+	capsule_line.r=circleP->r;
+
+	if(c2CircletoCapsule(circle_circleP, capsule_line))
+	{
+		cout << "Circle and capsule are in Collision" << endl;
 		circleP->body.setFillColor(sf::Color::Blue);
 	} 
 	else
@@ -194,6 +226,8 @@ void Game::draw()
 			window->draw(circleE->body);
 			break;
 		case GameState::C2CAPSULE:
+			window->draw(line);
+			window->draw(circleP->body);
 			break;
 		case GameState::C2AABB:
 			break;
