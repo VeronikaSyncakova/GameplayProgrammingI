@@ -123,6 +123,7 @@ void Game::update()
 				c2AABBcollision();
 				break;
 			case GameState::C2RAY:
+				c2rayCollision();
 				break;
 		}
 
@@ -309,6 +310,37 @@ void Game::c2AABBcollision()
 	
 }
 
+void Game::c2rayCollision()
+{
+	c2Ray ray_line; //position, direction(normalised), distance along d from position p to find endpoint of ray
+	ray_line.p=c2V(line->x,line->y);
+	float magnitude=sqrtf(line->x*line->x+line->y*line->y);
+	ray_line.d=c2V(line->x/magnitude, line->y/magnitude);
+	ray_line.t=magnitude;
+	c2Raycast raycast_raycast; //time of impact, normal of surface at impact (unit length)
+	raycast_raycast.t=1;
+	raycast_raycast.n=c2V(line->x/magnitude, line->y/magnitude);
+	c2Raycast* out=&raycast_raycast;
+
+	c2Circle circle_circleP;
+	int c2x=circleP->x+circleP->r;
+	int c2y=circleP->y+circleP->r;
+	circle_circleP.p=c2V(c2x,c2y);
+	circle_circleP.r=circleP->r;
+
+	if(c2RaytoCircle(ray_line, circle_circleP, out))
+	{
+		cout << "ray and circle are in Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Blue);
+	}
+	else
+	{
+		cout << "No Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Red);
+	}
+
+}
+
 void Game::draw()
 {
 	window->clear();
@@ -336,6 +368,8 @@ void Game::draw()
 			window->draw(circleP->body);
 			break;
 		case GameState::C2RAY:
+			window->draw(circleP->body);
+			window->draw(line->body);
 			break;
 	}
 	
