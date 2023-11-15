@@ -51,3 +51,8 @@ void Circle::moveLeft()
 	}
 	body.setPosition(sf::Vector2f(x,y));
 }
+
+void Circle::setPosition()
+{
+	body.setPosition(sf::Vector2f(x,y));
+}

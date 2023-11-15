@@ -4,6 +4,7 @@
 #include <./include/Player.h>
 #include <./include/NPC.h>
 #include <./include/Circle.h>
+#include <./include/Rectangle.h>
 
 
 enum class GameState{BOUNDING,C2CIRCLE,C2CAPSULE,C2AABB,C2RAY};
@@ -23,6 +24,9 @@ class Game
 		NPC* npc;
 		Circle* circleP;
 		Circle* circleE;
+		Circle* circleCapsule;
+		Rectangle* rectangleCapsule;
+		Rectangle* line;
 		GameState currentGameState;
 };
 

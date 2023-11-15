@@ -15,7 +15,7 @@ sf::Texture npc_texture;
 sf::Sprite player_sprite;
 sf::Sprite npc_sprite;
 
-sf::RectangleShape line;
+
 
 
 
@@ -27,6 +27,9 @@ void Game::initialize()
 	npc = new NPC();
 	circleP= new Circle();
 	circleE= new Circle();
+	line= new Rectangle();
+	circleCapsule=new Circle();
+	rectangleCapsule= new Rectangle();
 	currentGameState=GameState::BOUNDING;
 	window->setSize(sf::Vector2u(640, 480));
 	window->setTitle("Game");
@@ -47,12 +50,10 @@ void Game::initialize()
 	npc->initialize();
 	circleP->initialize(50,sf::Color::Red);
 	circleE->initialize(50,sf::Color::Yellow);
-	circleE->body.setPosition(sf::Vector2f(400,300));
-	circleE->x=400;
-	circleE->y=300;
-
-	line.setSize(sf::Vector2f(250.0f,5.0f));
-	line.setPosition(200.0f,300.0f);
+	line->initialize(200,300,250,5,sf::Color::White);
+	circleCapsule->initialize(50,sf::Color::Yellow);
+	rectangleCapsule->initialize(200,250,250,100,sf::Color::Yellow);
+	
 
 	/*player_texture.loadFromFile(".//images//player//Player.png");
 	npc_texture.loadFromFile(".//images//npc//npc.png");
@@ -83,35 +84,46 @@ void Game::update()
 		player->update();
 		npc->update();
 
-		//Setup NPC AABB
-		c2AABB aabb_npc;
-		aabb_npc.min = c2V(npc->m_sprite.getPosition().x, npc->m_sprite.getPosition().y); //lft top
-		aabb_npc.max = c2V(
-			npc->m_sprite.getPosition().x +
-			npc->m_sprite.getGlobalBounds().width, 
-			npc->m_sprite.getPosition().y +
-			npc->m_sprite.getGlobalBounds().height); //right bottom
-			
-		//Setup Player AABB
-		c2AABB aabb_player;
-		aabb_player.min = c2V(player->m_sprite.getPosition().x,player->m_sprite.getPosition().y); //left top
-		aabb_player.max = c2V(player->m_sprite.getGlobalBounds().width, player->m_sprite.getGlobalBounds().height); //right bottom
-		
-		if(c2AABBtoAABB(aabb_npc, aabb_player)){
-			cout << "NPC and Player are in Collision" << endl;
-			player->m_sprite.setColor(sf::Color::Blue);
-			player->m_boundingBox.setOutlineColor(sf::Color::Blue);
-		} else{
-			cout << "No Collision" << endl;
-			player->m_sprite.setColor(sf::Color::White);
-			player->m_boundingBox.setOutlineColor(sf::Color::Green);
+		switch(currentGameState)
+		{
+			case GameState::BOUNDING:
+				//Setup NPC AABB
+				c2AABB aabb_npc;
+				aabb_npc.min = c2V(npc->m_sprite.getPosition().x, npc->m_sprite.getPosition().y); //lft top
+				aabb_npc.max = c2V(
+					npc->m_sprite.getPosition().x +
+					npc->m_sprite.getGlobalBounds().width, 
+					npc->m_sprite.getPosition().y +
+					npc->m_sprite.getGlobalBounds().height); //right bottom
+					
+				//Setup Player AABB
+				c2AABB aabb_player;
+				aabb_player.min = c2V(player->m_sprite.getPosition().x,player->m_sprite.getPosition().y); //left top
+				aabb_player.max = c2V(player->m_sprite.getGlobalBounds().width, player->m_sprite.getGlobalBounds().height); //right bottom
+				
+				if(c2AABBtoAABB(aabb_npc, aabb_player)){
+					cout << "NPC and Player are in Collision" << endl;
+					player->m_sprite.setColor(sf::Color::Blue);
+					player->m_boundingBox.setOutlineColor(sf::Color::Blue);
+				} else{
+					cout << "No Collision" << endl;
+					player->m_sprite.setColor(sf::Color::White);
+					player->m_boundingBox.setOutlineColor(sf::Color::Green);
+				}
+				break;
+			case GameState::C2CIRCLE:
+				//circle to circle setup and collision check
+				c2circleCollision();
+				break;
+			case GameState::C2CAPSULE:
+				//c2 capsule setup and collision check
+				c2capsuleCollision();
+				break;
+			case GameState::C2AABB:
+				break;
+			case GameState::C2RAY:
+				break;
 		}
-
-		//circle to circle setup and collision check
-		c2circleCollision();
-
-		//c2 capsule setup and collision check
-		c2capsuleCollision();
 
 
 		// Move the player
@@ -147,10 +159,18 @@ void Game::update()
 			else if(sf::Keyboard::W==event.key.code)
 			{
 				currentGameState=GameState::C2CIRCLE;
+				circleP->x=0;
+				circleP->y=0;
+				circleE->x=400;
+				circleE->y=300;
 			}
 			else if(sf::Keyboard::E==event.key.code)
 			{
 				currentGameState=GameState::C2CAPSULE;
+				circleP->x=0;
+				circleP->y=0;
+				circleE->x=-400;
+				circleE->y=-300;
 			}
 			else if(sf::Keyboard::R==event.key.code)
 			{
@@ -160,6 +180,8 @@ void Game::update()
 			{
 				currentGameState=GameState::C2RAY;
 			}
+			circleE->setPosition();
+			circleP->setPosition();
 		}
 	}
 
@@ -174,6 +196,8 @@ void Game::c2circleCollision() //c2circle to circle collision
 	c2Circle circle_circleE;
 	circle_circleE.p=c2V(circleE->x,circleE->y);
 	circle_circleE.r=circleE->r;
+	circleE->body.setFillColor(sf::Color::Yellow);
+	circleE->body.setOutlineColor(sf::Color::Transparent);
 
 	if(c2CircletoCircle(circle_circleP, circle_circleE))
 	{
@@ -190,13 +214,33 @@ void Game::c2circleCollision() //c2circle to circle collision
 void Game::c2capsuleCollision()
 {
 	c2Circle circle_circleP;
-	circle_circleP.p=c2V(circleP->x,circleP->y);
+	int c2x=circleP->x+circleP->r;
+	int c2y=circleP->y+circleP->r;
+	circle_circleP.p=c2V(c2x,c2y);
 	circle_circleP.r=circleP->r;
 
 	c2Capsule capsule_line;
-	capsule_line.a=c2V(line.getPosition().x,line.getPosition().y);
-	capsule_line.b=c2V(line.getGlobalBounds().width,line.getGlobalBounds().height);
+	capsule_line.a=c2V(line->x,line->y);
+	capsule_line.b=c2V(line->x+line->w,line->y);
 	capsule_line.r=circleP->r;
+	circleE->x=capsule_line.a.x-circleE->r;
+	circleE->y=capsule_line.a.y-circleE->r;
+	circleE->setPosition();
+	circleE->body.setFillColor(sf::Color::Transparent);
+	circleE->body.setOutlineColor(sf::Color::Yellow);
+	circleE->body.setOutlineThickness(1.0f);
+
+	circleCapsule->x=capsule_line.b.x-circleE->r;
+	circleCapsule->y=capsule_line.b.y-circleE->r;
+	circleCapsule->setPosition();
+	circleCapsule->body.setFillColor(sf::Color::Transparent);
+	circleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	circleCapsule->body.setOutlineThickness(1.0f);
+
+	rectangleCapsule->body.setFillColor(sf::Color::Transparent);
+	rectangleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	rectangleCapsule->body.setOutlineThickness(1.0f);
+
 
 	if(c2CircletoCapsule(circle_circleP, capsule_line))
 	{
@@ -226,8 +270,11 @@ void Game::draw()
 			window->draw(circleE->body);
 			break;
 		case GameState::C2CAPSULE:
-			window->draw(line);
+			window->draw(line->body);
 			window->draw(circleP->body);
+			window->draw(circleE->body);
+			window->draw(circleCapsule->body);
+			window->draw(rectangleCapsule->body);
 			break;
 		case GameState::C2AABB:
 			break;

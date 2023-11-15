@@ -1,25 +1,24 @@
-#ifndef CIRCLE_H
-#define CIRCLE_H
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
 
 #include <iostream>
 #include <./include/GameObject.h>
 
 using namespace std;
 
-class Circle : public GameObject
+class Rectangle : public GameObject
 {
 public:
-	Circle();
-	~Circle();
-	void initialize(int t_radius, sf::Color color);
+	Rectangle();
+	~Rectangle();
+	void initialize(int t_x,int t_y,int t_w,int t_h, sf::Color color);
 	void update();
 	void draw();
 	void moveUp();
 	void moveDown();
 	void moveRight();
 	void moveLeft();
-	void setPosition();
 
-	sf::CircleShape body;
+	sf::RectangleShape body;
 };
 #endif
