@@ -20,6 +20,7 @@ class Game
 		void draw();
 		void c2circleCollision();
 		void c2capsuleCollision();
+		void c2AABBcollision();
 		Player* player;
 		NPC* npc;
 		Circle* circleP;

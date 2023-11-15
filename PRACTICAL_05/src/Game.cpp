@@ -120,6 +120,7 @@ void Game::update()
 				c2capsuleCollision();
 				break;
 			case GameState::C2AABB:
+				c2AABBcollision();
 				break;
 			case GameState::C2RAY:
 				break;
@@ -176,6 +177,14 @@ void Game::update()
 			else if(sf::Keyboard::R==event.key.code)
 			{
 				currentGameState=GameState::C2AABB;
+				npc->x=400;
+				npc->y=300;
+				npc->m_sprite.setPosition(sf::Vector2f(npc->x,npc->y));
+				npc->m_boundingBox.setPosition(sf::Vector2f(npc->x,npc->y));
+				circleP->x=0;
+				circleP->y=0;
+				circleE->x=-400;
+				circleE->y=-300;
 			}
 			else if(sf::Keyboard::T==event.key.code)
 			{
@@ -272,6 +281,33 @@ void Game::c2capsuleCollision()
 
 }
 
+void Game::c2AABBcollision()
+{
+	c2AABB aabb_npc;
+	aabb_npc.min = c2V(npc->m_sprite.getPosition().x, npc->m_sprite.getPosition().y); //lft top
+	aabb_npc.max = c2V(npc->m_sprite.getPosition().x +
+					npc->m_sprite.getGlobalBounds().width, 
+					npc->m_sprite.getPosition().y +
+					npc->m_sprite.getGlobalBounds().height); //right bottom
+	
+	c2Circle circle_circleP;
+	int c2x=circleP->x+circleP->r;
+	int c2y=circleP->y+circleP->r;
+	circle_circleP.p=c2V(c2x,c2y);
+	circle_circleP.r=circleP->r;
+
+	if(c2CircletoAABB(circle_circleP, aabb_npc))
+	{
+		cout << "circle and aabb are in Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Blue);
+	}
+	else
+	{
+		cout << "No Collision" << endl;
+		circleP->body.setFillColor(sf::Color::Red);
+	}
+	
+}
 
 void Game::draw()
 {
@@ -296,6 +332,8 @@ void Game::draw()
 			window->draw(player->m_boundingBox);
 			break;
 		case GameState::C2AABB:
+			window->draw(npc->m_boundingBox);
+			window->draw(circleP->body);
 			break;
 		case GameState::C2RAY:
 			break;

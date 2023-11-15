@@ -4,6 +4,7 @@
 #include <iostream>
 #include <./include/GameObject.h>
 
+
 using namespace std;
 
 class Circle : public GameObject
@@ -21,5 +22,6 @@ public:
 	void setPosition();
 
 	sf::CircleShape body;
+
 };
 #endif
