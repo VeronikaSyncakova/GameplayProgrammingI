@@ -171,6 +171,7 @@ void Game::update()
 				circleP->y=0;
 				circleE->x=-400;
 				circleE->y=-300;
+				
 			}
 			else if(sf::Keyboard::R==event.key.code)
 			{
@@ -252,6 +253,23 @@ void Game::c2capsuleCollision()
 		cout << "No Collision" << endl;
 		circleP->body.setFillColor(sf::Color::Red);
 	}
+
+	c2AABB aabb_player;
+	aabb_player.min = c2V(player->m_sprite.getPosition().x,player->m_sprite.getPosition().y); 
+	aabb_player.max = c2V(player->m_sprite.getPosition().x + player->m_sprite.getGlobalBounds().width, player->m_sprite.getPosition().y + player->m_sprite.getGlobalBounds().height);
+	
+
+	if(c2AABBtoCapsule(aabb_player, capsule_line))
+	{
+		cout << "aabb and capsule are in Collision" << endl;
+		player->m_boundingBox.setOutlineColor(sf::Color::Blue);
+	}
+	else
+	{
+		cout << "No Collision" << endl;
+		player->m_boundingBox.setOutlineColor(sf::Color::Green);
+	}
+
 }
 
 
@@ -275,6 +293,7 @@ void Game::draw()
 			window->draw(circleE->body);
 			window->draw(circleCapsule->body);
 			window->draw(rectangleCapsule->body);
+			window->draw(player->m_boundingBox);
 			break;
 		case GameState::C2AABB:
 			break;
