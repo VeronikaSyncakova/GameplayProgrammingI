@@ -22,6 +22,7 @@ class Game
 		void c2capsuleCollision();
 		void c2AABBcollision();
 		void c2rayCollision();
+		
 		Player* player;
 		NPC* npc;
 		Circle* circleP;

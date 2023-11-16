@@ -310,17 +310,40 @@ void Game::c2AABBcollision()
 	
 }
 
+c2Ray pointsToRay(sf::Vector2f t_1, sf::Vector2f t_2)
+{
+    //std::cout << t_1.x << " " << t_1.y << "\t" << t_2.x << " " << t_2.y << "\n";
+    // c2v p;   c2v d;   float t; // d is normalised vector, t is length
+    c2Ray i;
+    c2v u;
+            u.x = t_1.x;
+            u.y = t_1.y;
+        i.p = u;
+
+        // normalising t_2
+        float dist = sqrtf(t_2.x * t_2.x + t_2.y * t_2.y);
+            u.x = t_2.x / dist;
+            u.y = t_2.y / dist;
+        i.d = u;
+    i.t = dist;
+
+    return i;
+} 
+
 void Game::c2rayCollision()
 {
 	c2Ray ray_line; //position, direction(normalised), distance along d from position p to find endpoint of ray
 	ray_line.p=c2V(line->x,line->y);
-	float magnitude=sqrtf(line->x*line->x+line->y*line->y);
-	ray_line.d=c2V(line->x/magnitude, line->y/magnitude);
+	float magnitude=sqrtf(line->w*line->w + line->h*line->h);
+	ray_line.d=c2V(1,1);//(line->x+line->w)/magnitude, (line->y+line->h)/magnitude);
 	ray_line.t=magnitude;
 	c2Raycast raycast_raycast; //time of impact, normal of surface at impact (unit length)
-	raycast_raycast.t=1;
-	raycast_raycast.n=c2V(line->x/magnitude, line->y/magnitude);
+	raycast_raycast.t=0;
+	raycast_raycast.n=c2V(0, 0);
 	c2Raycast* out=&raycast_raycast;
+
+	std::cout<<"magnitude: "<<ray_line.t<<"\n";
+	std::cout<<"x2: "<<ray_line.d.x<<"\n";
 
 	c2Circle circle_circleP;
 	int c2x=circleP->x+circleP->r;
