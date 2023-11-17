@@ -51,3 +51,8 @@ void Rectangle::moveLeft()
 	}
 	body.setPosition(sf::Vector2f(x,y));
 }
+
+void Rectangle::setPosition()
+{
+	body.setPosition(sf::Vector2f(x,y));
+}

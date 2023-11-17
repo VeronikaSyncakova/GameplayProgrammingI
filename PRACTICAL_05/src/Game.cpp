@@ -30,6 +30,7 @@ void Game::initialize()
 	line= new Rectangle();
 	circleCapsule=new Circle();
 	rectangleCapsule= new Rectangle();
+	circleCapsuleR=new Circle();
 	currentGameState=GameState::BOUNDING;
 	window->setSize(sf::Vector2u(640, 480));
 	window->setTitle("Game");
@@ -52,6 +53,7 @@ void Game::initialize()
 	circleE->initialize(50,sf::Color::Yellow);
 	line->initialize(200,300,250,5,sf::Color::White);
 	circleCapsule->initialize(50,sf::Color::Yellow);
+	circleCapsuleR->initialize(50,sf::Color::Yellow);
 	rectangleCapsule->initialize(200,250,250,100,sf::Color::Yellow);
 	
 
@@ -135,21 +137,25 @@ void Game::update()
 			{
 				player->moveUp();
 				circleP->moveUp();
+				capsuleMoveUp();
 			}
 			else if (sf::Keyboard::Down == event.key.code)
 			{
 				player->moveDown();
 				circleP->moveDown();
+				capsuleMoveDown();
 			}
 			else if (sf::Keyboard::Right == event.key.code)
 			{
 				player->moveRight();
 				circleP->moveRight();
+				capsuleMoveRight();
 			}
 			else if (sf::Keyboard::Left == event.key.code)
 			{
 				player->moveLeft();
 				circleP->moveLeft();
+				capsuleMoveLeft();
 			}
 		}
 		if(event.type==sf::Event::KeyReleased)
@@ -196,6 +202,58 @@ void Game::update()
 		}
 	}
 
+}
+
+void Game::capsuleMoveUp()
+{
+	if(circleCapsule->y>0)
+	{
+		circleCapsule->y-=3;
+		circleCapsuleR->y-=3;
+		rectangleCapsule->y-=3;
+		line->y-=3;
+	}
+	rectangleCapsule->setPosition();
+	line->setPosition();
+}
+
+void Game::capsuleMoveDown()
+{
+	if(circleCapsule->y+circleCapsule->h<600)
+	{
+		circleCapsule->y+=3;
+		circleCapsuleR->y+=3;
+		rectangleCapsule->y+=3;
+		line->y+=3;
+	}
+	rectangleCapsule->setPosition();
+	line->setPosition();
+}
+
+void Game::capsuleMoveLeft()
+{
+	if(circleCapsuleR->x>0)
+	{
+		circleCapsule->x-=3;
+		circleCapsuleR->x-=3;
+		rectangleCapsule->x-=3;
+		line->x-=3;
+	}
+	rectangleCapsule->setPosition();
+	line->setPosition();
+}
+
+void Game::capsuleMoveRight()
+{
+	if(circleCapsule->x+circleCapsule->w<800)
+	{
+		circleCapsule->x+=3;
+		circleCapsuleR->x+=3;
+		rectangleCapsule->x+=3;
+		line->x+=3;
+	}
+	rectangleCapsule->setPosition();
+	line->setPosition();
 }
 
 void Game::c2circleCollision() //c2circle to circle collision
@@ -307,6 +365,43 @@ void Game::c2AABBcollision()
 		cout << "No Collision" << endl;
 		circleP->body.setFillColor(sf::Color::Red);
 	}
+
+	c2Capsule capsule_line;
+	capsule_line.a=c2V(line->x,line->y);
+	capsule_line.b=c2V(line->x+line->w,line->y);
+	capsule_line.r=circleCapsuleR->r;
+	circleCapsuleR->x=capsule_line.a.x-circleCapsuleR->r;
+	circleCapsuleR->y=capsule_line.a.y-circleCapsuleR->r;
+	circleCapsuleR->setPosition();
+	circleCapsuleR->body.setFillColor(sf::Color::Transparent);
+	circleCapsuleR->body.setOutlineColor(sf::Color::Yellow);
+	circleCapsuleR->body.setOutlineThickness(1.0f);
+
+	circleCapsule->x=capsule_line.b.x-circleCapsule->r;
+	circleCapsule->y=capsule_line.b.y-circleCapsule->r;
+	circleCapsule->setPosition();
+	circleCapsule->body.setFillColor(sf::Color::Transparent);
+	circleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	circleCapsule->body.setOutlineThickness(1.0f);
+
+	rectangleCapsule->body.setFillColor(sf::Color::Transparent);
+	rectangleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	rectangleCapsule->body.setOutlineThickness(1.0f);
+	
+	if(c2AABBtoCapsule(aabb_npc, capsule_line))
+	{
+		cout << "aabb and capsule are in Collision" << endl;
+		circleCapsuleR->body.setOutlineColor(sf::Color::Blue);
+		circleCapsule->body.setOutlineColor(sf::Color::Blue);
+		rectangleCapsule->body.setOutlineColor(sf::Color::Blue);
+	}
+	else
+	{
+		cout << "No Collision" << endl;
+		circleCapsuleR->body.setOutlineColor(sf::Color::Yellow);
+		circleCapsule->body.setOutlineColor(sf::Color::Yellow);
+		rectangleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	}
 	
 }
 
@@ -364,6 +459,15 @@ void Game::c2rayCollision()
 
 }
 
+void Game::drawCapsule()
+{
+	window->draw(circleCapsule->body);
+	window->draw(circleCapsuleR->body);
+	window->draw(rectangleCapsule->body);
+	window->draw(line->body);
+
+}
+
 void Game::draw()
 {
 	window->clear();
@@ -389,12 +493,14 @@ void Game::draw()
 		case GameState::C2AABB:
 			window->draw(npc->m_boundingBox);
 			window->draw(circleP->body);
+			drawCapsule();
 			break;
 		case GameState::C2RAY:
 			window->draw(circleP->body);
 			window->draw(line->body);
 			break;
 	}
+	
 	
 	//window->draw(player->m_boundingBox);
 	//player->draw();

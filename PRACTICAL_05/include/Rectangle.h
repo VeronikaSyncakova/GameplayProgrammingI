@@ -18,6 +18,7 @@ public:
 	void moveDown();
 	void moveRight();
 	void moveLeft();
+	void setPosition();
 
 	sf::RectangleShape body;
 };

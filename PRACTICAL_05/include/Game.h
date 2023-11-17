@@ -22,12 +22,18 @@ class Game
 		void c2capsuleCollision();
 		void c2AABBcollision();
 		void c2rayCollision();
+		void capsuleMoveUp();
+		void capsuleMoveDown();
+		void capsuleMoveRight();
+		void capsuleMoveLeft();
+		void drawCapsule();
 		
 		Player* player;
 		NPC* npc;
 		Circle* circleP;
 		Circle* circleE;
 		Circle* circleCapsule;
+		Circle* circleCapsuleR;
 		Rectangle* rectangleCapsule;
 		Rectangle* line;
 		GameState currentGameState;
