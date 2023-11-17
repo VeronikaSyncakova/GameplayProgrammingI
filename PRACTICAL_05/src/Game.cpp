@@ -14,7 +14,7 @@ sf::Texture npc_texture;
 
 sf::Sprite player_sprite;
 sf::Sprite npc_sprite;
-
+bool moveCapsule=false;
 
 
 
@@ -31,6 +31,7 @@ void Game::initialize()
 	circleCapsule=new Circle();
 	rectangleCapsule= new Rectangle();
 	circleCapsuleR=new Circle();
+	rayLine=new Line();
 	currentGameState=GameState::BOUNDING;
 	window->setSize(sf::Vector2u(640, 480));
 	window->setTitle("Game");
@@ -55,6 +56,7 @@ void Game::initialize()
 	circleCapsule->initialize(50,sf::Color::Yellow);
 	circleCapsuleR->initialize(50,sf::Color::Yellow);
 	rectangleCapsule->initialize(200,250,250,100,sf::Color::Yellow);
+	rayLine->initialize(sf::Vector2f(0,0),sf::Vector2f(400,300));
 	
 
 	/*player_texture.loadFromFile(".//images//player//Player.png");
@@ -137,25 +139,37 @@ void Game::update()
 			{
 				player->moveUp();
 				circleP->moveUp();
-				capsuleMoveUp();
+				if(moveCapsule)
+				{
+					capsuleMoveUp();
+				}
 			}
 			else if (sf::Keyboard::Down == event.key.code)
 			{
 				player->moveDown();
 				circleP->moveDown();
-				capsuleMoveDown();
+				if(moveCapsule)
+				{
+					capsuleMoveDown();
+				}
 			}
 			else if (sf::Keyboard::Right == event.key.code)
 			{
 				player->moveRight();
 				circleP->moveRight();
-				capsuleMoveRight();
+				if(moveCapsule)
+				{
+					capsuleMoveRight();
+				}
 			}
 			else if (sf::Keyboard::Left == event.key.code)
 			{
 				player->moveLeft();
 				circleP->moveLeft();
-				capsuleMoveLeft();
+				if(moveCapsule)
+				{
+					capsuleMoveLeft();
+				}
 			}
 		}
 		if(event.type==sf::Event::KeyReleased)
@@ -163,6 +177,7 @@ void Game::update()
 			if(sf::Keyboard::Q==event.key.code)
 			{
 				currentGameState=GameState::BOUNDING;
+				moveCapsule=false;
 			}
 			else if(sf::Keyboard::W==event.key.code)
 			{
@@ -171,6 +186,7 @@ void Game::update()
 				circleP->y=0;
 				circleE->x=400;
 				circleE->y=300;
+				moveCapsule=false;
 			}
 			else if(sf::Keyboard::E==event.key.code)
 			{
@@ -179,6 +195,11 @@ void Game::update()
 				circleP->y=0;
 				circleE->x=-400;
 				circleE->y=-300;
+				moveCapsule=false;
+				rectangleCapsule->initialize(200,250,250,100,sf::Color::Yellow);
+				rectangleCapsule->setPosition();
+				line->initialize(200,300,250,5,sf::Color::White);
+				line->setPosition();
 				
 			}
 			else if(sf::Keyboard::R==event.key.code)
@@ -192,10 +213,13 @@ void Game::update()
 				circleP->y=0;
 				circleE->x=-400;
 				circleE->y=-300;
+				moveCapsule=true;
+
 			}
 			else if(sf::Keyboard::T==event.key.code)
 			{
 				currentGameState=GameState::C2RAY;
+				moveCapsule=true;
 			}
 			circleE->setPosition();
 			circleP->setPosition();
@@ -427,6 +451,7 @@ c2Ray pointsToRay(sf::Vector2f t_1, sf::Vector2f t_2)
 
 void Game::c2rayCollision()
 {
+	/*
 	c2Ray ray_line; //position, direction(normalised), distance along d from position p to find endpoint of ray
 	ray_line.p=c2V(line->x,line->y);
 	float magnitude=sqrtf(line->w*line->w + line->h*line->h);
@@ -439,6 +464,13 @@ void Game::c2rayCollision()
 
 	std::cout<<"magnitude: "<<ray_line.t<<"\n";
 	std::cout<<"x2: "<<ray_line.d.x<<"\n";
+	*/
+
+	c2Ray ray_line=pointsToRay(rayLine->a,rayLine->b);
+	c2Raycast raycast_raycast; //time of impact, normal of surface at impact (unit length)
+	raycast_raycast.t=0;
+	raycast_raycast.n=c2V(0, 0);
+	c2Raycast* out=&raycast_raycast;
 
 	c2Circle circle_circleP;
 	int c2x=circleP->x+circleP->r;
@@ -497,7 +529,7 @@ void Game::draw()
 			break;
 		case GameState::C2RAY:
 			window->draw(circleP->body);
-			window->draw(line->body);
+			rayLine->draw(window);
 			break;
 	}
 	

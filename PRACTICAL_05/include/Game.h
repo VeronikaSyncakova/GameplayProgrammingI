@@ -5,6 +5,8 @@
 #include <./include/NPC.h>
 #include <./include/Circle.h>
 #include <./include/Rectangle.h>
+#include <./include/Line.h>
+
 
 
 enum class GameState{BOUNDING,C2CIRCLE,C2CAPSULE,C2AABB,C2RAY};
@@ -36,6 +38,7 @@ class Game
 		Circle* circleCapsuleR;
 		Rectangle* rectangleCapsule;
 		Rectangle* line;
+		Line* rayLine;
 		GameState currentGameState;
 };
 

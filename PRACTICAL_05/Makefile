@@ -29,7 +29,7 @@ else
 	TARGET		:= ${BUILD_DIR}/sampleapp.bin
 endif
 
-SRC				:= ${SRC_DIR}/main.cpp ${SRC_DIR}/Game.cpp ${SRC_DIR}/Player.cpp ${SRC_DIR}/NPC.cpp ${SRC_DIR}/GameObject.cpp ${SRC_DIR}/Circle.cpp ${SRC_DIR}/Rectangle.cpp ${INCLUDES}/cute_c2.h
+SRC				:= ${SRC_DIR}/main.cpp ${SRC_DIR}/Game.cpp ${SRC_DIR}/Player.cpp ${SRC_DIR}/NPC.cpp ${SRC_DIR}/GameObject.cpp ${SRC_DIR}/Circle.cpp ${SRC_DIR}/Rectangle.cpp ${SRC_DIR}/Line.cpp ${INCLUDES}/cute_c2.h
 
 all				:= build
 
