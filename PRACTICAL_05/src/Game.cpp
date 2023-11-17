@@ -15,7 +15,7 @@ sf::Texture npc_texture;
 sf::Sprite player_sprite;
 sf::Sprite npc_sprite;
 bool moveCapsule=false;
-
+bool displayCapsule=false;
 
 
 
@@ -58,7 +58,7 @@ void Game::initialize()
 	rectangleCapsule->initialize(200,250,250,100,sf::Color::Yellow);
 	rayLine->initialize(sf::Vector2f(0,0),sf::Vector2f(400,300));
 	
-
+	std::cout<<"Q\nW\nE\nR\nT (pressC to see capsule)\n";
 	/*player_texture.loadFromFile(".//images//player//Player.png");
 	npc_texture.loadFromFile(".//images//npc//npc.png");
 
@@ -220,7 +220,13 @@ void Game::update()
 			{
 				currentGameState=GameState::C2RAY;
 				moveCapsule=true;
+				displayCapsule=false;
 			}
+			else if(sf::Keyboard::C==event.key.code && currentGameState==GameState::C2RAY)
+			{
+				displayCapsule=true;
+			}
+
 			circleE->setPosition();
 			circleP->setPosition();
 		}
@@ -435,15 +441,15 @@ c2Ray pointsToRay(sf::Vector2f t_1, sf::Vector2f t_2)
     // c2v p;   c2v d;   float t; // d is normalised vector, t is length
     c2Ray i;
     c2v u;
-            u.x = t_1.x;
-            u.y = t_1.y;
-        i.p = u;
+    u.x = t_1.x;
+    u.y = t_1.y;
+    i.p = u;
 
-        // normalising t_2
-        float dist = sqrtf(t_2.x * t_2.x + t_2.y * t_2.y);
-            u.x = t_2.x / dist;
-            u.y = t_2.y / dist;
-        i.d = u;
+    // normalising t_2
+    float dist = sqrtf(t_2.x * t_2.x + t_2.y * t_2.y);
+    u.x = t_2.x / dist;
+    u.y = t_2.y / dist;
+    i.d = u;
     i.t = dist;
 
     return i;
@@ -466,7 +472,11 @@ void Game::c2rayCollision()
 	std::cout<<"x2: "<<ray_line.d.x<<"\n";
 	*/
 
-	c2Ray ray_line=pointsToRay(rayLine->a,rayLine->b);
+	c2Ray ray_line;//=pointsToRay(rayLine->a,rayLine->b);
+	ray_line.p=c2V(rayLine->a.x,rayLine->a.y);
+	float magnitude=sqrtf((rayLine->a.x - rayLine->b.x)*(rayLine->a.x - rayLine->b.x) + (rayLine->a.y - rayLine->b.y)*(rayLine->a.y - rayLine->b.y));
+	ray_line.d=c2V(rayLine->b.x/magnitude, rayLine->b.y/magnitude);
+	ray_line.t=magnitude;
 	c2Raycast raycast_raycast; //time of impact, normal of surface at impact (unit length)
 	raycast_raycast.t=0;
 	raycast_raycast.n=c2V(0, 0);
@@ -489,6 +499,57 @@ void Game::c2rayCollision()
 		circleP->body.setFillColor(sf::Color::Red);
 	}
 
+	c2AABB aabb_player;
+	aabb_player.min = c2V(player->m_sprite.getPosition().x,player->m_sprite.getPosition().y); 
+	aabb_player.max = c2V(player->m_sprite.getPosition().x + player->m_sprite.getGlobalBounds().width, player->m_sprite.getPosition().y + player->m_sprite.getGlobalBounds().height);
+
+	if(c2RaytoAABB(ray_line, aabb_player, out))
+	{
+		cout << "ray and aabb are in Collision" << endl;
+		player->m_boundingBox.setOutlineColor(sf::Color::Blue);
+	}
+	else
+	{
+		cout << "No Collision" << endl;
+		player->m_boundingBox.setOutlineColor(sf::Color::Green);
+	}
+
+	c2Capsule capsule_line;
+	capsule_line.a=c2V(line->x,line->y);
+	capsule_line.b=c2V(line->x+line->w,line->y);
+	capsule_line.r=circleCapsuleR->r;
+	circleCapsuleR->x=capsule_line.a.x-circleCapsuleR->r;
+	circleCapsuleR->y=capsule_line.a.y-circleCapsuleR->r;
+	circleCapsuleR->setPosition();
+	circleCapsuleR->body.setFillColor(sf::Color::Transparent);
+	circleCapsuleR->body.setOutlineColor(sf::Color::Yellow);
+	circleCapsuleR->body.setOutlineThickness(1.0f);
+
+	circleCapsule->x=capsule_line.b.x-circleCapsule->r;
+	circleCapsule->y=capsule_line.b.y-circleCapsule->r;
+	circleCapsule->setPosition();
+	circleCapsule->body.setFillColor(sf::Color::Transparent);
+	circleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	circleCapsule->body.setOutlineThickness(1.0f);
+
+	rectangleCapsule->body.setFillColor(sf::Color::Transparent);
+	rectangleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	rectangleCapsule->body.setOutlineThickness(1.0f);
+	
+	if(c2RaytoCapsule(ray_line, capsule_line, out))
+	{
+		cout << "ray and capsule are in Collision" << endl;
+		circleCapsuleR->body.setOutlineColor(sf::Color::Blue);
+		circleCapsule->body.setOutlineColor(sf::Color::Blue);
+		rectangleCapsule->body.setOutlineColor(sf::Color::Blue);
+	}
+	else
+	{
+		cout << "No Collision" << endl;
+		circleCapsuleR->body.setOutlineColor(sf::Color::Yellow);
+		circleCapsule->body.setOutlineColor(sf::Color::Yellow);
+		rectangleCapsule->body.setOutlineColor(sf::Color::Yellow);
+	}
 }
 
 void Game::drawCapsule()
@@ -528,7 +589,15 @@ void Game::draw()
 			drawCapsule();
 			break;
 		case GameState::C2RAY:
-			window->draw(circleP->body);
+			if(displayCapsule)
+			{
+				drawCapsule();
+			}
+			else
+			{
+				window->draw(circleP->body);
+				window->draw(player->m_boundingBox);
+			}
 			rayLine->draw(window);
 			break;
 	}
