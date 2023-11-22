@@ -23,9 +23,19 @@ public:
 	void moveLeft();
 	void moveRight();
 	void jump();
+	void setScale(Vector2f);
+	Vector2f getScale();
+	void run();
+	void crouch();
+	void attack();
+	void shield();
+
 protected:
 	Vector2f position;
 	Sprite sprite;
 	Texture texture;
+	int jumping;
+	bool running;
+	int crouching;
 };
 #endif // !GAMEOBJECT_H

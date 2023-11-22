@@ -33,12 +33,24 @@ int main()
 	Command *moveLeft = new MoveLeftCommand();
 	Command *moveRight = new MoveRightCommand();
 	Command *jump = new JumpCommand();
+	Command *run= new RunCommand();
+	Command *crouch= new CrouchCommand();
+	Command *attack= new AttackCommand();
+	Command *shield= new ShieldCommand();
+
 
 	InputManager::getInstance()->keyCommands(Keyboard::W, moveUp);
 	InputManager::getInstance()->keyCommands(Keyboard::S, moveDown);
 	InputManager::getInstance()->keyCommands(Keyboard::A, moveLeft);
 	InputManager::getInstance()->keyCommands(Keyboard::D, moveRight);
 	InputManager::getInstance()->keyCommands(Keyboard::J, jump);
+	InputManager::getInstance()->keyCommands(Keyboard::F, run);
+	InputManager::getInstance()->keyCommands(Keyboard::C, crouch);
+	InputManager::getInstance()->keyCommands(Keyboard::B, attack);
+	InputManager::getInstance()->keyCommands(Keyboard::P, shield);
+
+
+
 
 	GameObject *player = new Player(Vector2f(100, 100), "./images/player/Player");
 	GameObject *enemy = new Enemy(Vector2f(300, 200), "./images/npc/npc");

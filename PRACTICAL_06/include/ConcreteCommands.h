@@ -93,7 +93,35 @@ public:
 	virtual void execute(GameObject *gameobject)
 	{
 		previous = gameobject->getPosition();
+		scale= gameobject->getScale();
 		gameobject->jump();
+		
+	}
+	virtual void undo(GameObject *gameobject)
+	{
+		/*
+		gameobject->setPosition(previous);
+		gameobject->setScale(scale);*/
+		gameobject->jump();
+	}
+	Command *copy()
+	{
+		return new JumpCommand(*this);
+	}
+
+private:
+	Vector2f previous;
+	Vector2f scale;
+};
+
+class RunCommand : public Command
+{
+public:
+	virtual void execute(GameObject *gameobject)
+	{
+		previous = gameobject->getPosition();
+		gameobject->run();
+		
 	}
 	virtual void undo(GameObject *gameobject)
 	{
@@ -101,7 +129,74 @@ public:
 	}
 	Command *copy()
 	{
-		return new JumpCommand(*this);
+		return new RunCommand(*this);
+	}
+
+private:
+	Vector2f previous;
+};
+
+class CrouchCommand : public Command
+{
+public:
+	virtual void execute(GameObject *gameobject)
+	{
+		previous = gameobject->getPosition();
+		gameobject->crouch();
+		
+	}
+	virtual void undo(GameObject *gameobject)
+	{
+		//gameobject->setPosition(previous);
+		gameobject->crouch();
+	}
+	Command *copy()
+	{
+		return new CrouchCommand(*this);
+	}
+
+private:
+	Vector2f previous;
+};
+
+class AttackCommand : public Command
+{
+public:
+	virtual void execute(GameObject *gameobject)
+	{
+		previous = gameobject->getPosition();
+		gameobject->attack();
+		
+	}
+	virtual void undo(GameObject *gameobject)
+	{
+		gameobject->setPosition(previous);
+	}
+	Command *copy()
+	{
+		return new AttackCommand(*this);
+	}
+
+private:
+	Vector2f previous;
+};
+
+class ShieldCommand : public Command
+{
+public:
+	virtual void execute(GameObject *gameobject)
+	{
+		previous = gameobject->getPosition();
+		gameobject->shield();
+		
+	}
+	virtual void undo(GameObject *gameobject)
+	{
+		gameobject->setPosition(previous);
+	}
+	Command *copy()
+	{
+		return new ShieldCommand(*this);
 	}
 
 private:
