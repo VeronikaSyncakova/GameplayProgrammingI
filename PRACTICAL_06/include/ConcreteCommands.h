@@ -93,7 +93,7 @@ public:
 	virtual void execute(GameObject *gameobject)
 	{
 		previous = gameobject->getPosition();
-		scale= gameobject->getScale();
+		//scale= gameobject->getScale();
 		gameobject->jump();
 		
 	}
@@ -170,7 +170,8 @@ public:
 	}
 	virtual void undo(GameObject *gameobject)
 	{
-		gameobject->setPosition(previous);
+		//gameobject->setPosition(previous);
+		gameobject->attack();
 	}
 	Command *copy()
 	{
@@ -192,7 +193,8 @@ public:
 	}
 	virtual void undo(GameObject *gameobject)
 	{
-		gameobject->setPosition(previous);
+		//gameobject->setPosition(previous);
+		gameobject->shield();
 	}
 	Command *copy()
 	{

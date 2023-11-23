@@ -37,5 +37,11 @@ protected:
 	int jumping;
 	bool running;
 	int crouching;
+	Texture attackT;
+	Texture shieldT;
+	Sprite attackS;
+	Sprite shieldS;
+	bool attacking;
+	bool shielding;
 };
 #endif // !GAMEOBJECT_H
