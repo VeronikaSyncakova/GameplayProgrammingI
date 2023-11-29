@@ -24,8 +24,10 @@ int main()
 		}
 	}
 
+
 	// Setup Players Default Animated Sprite
 	AnimatedSprite player_animated_sprite(player_texture);
+	AnimatedSprite new_animated_sprite(player_texture);
 
 	Player player(player_animated_sprite);
 	Player npc(player_animated_sprite);
@@ -48,6 +50,32 @@ int main()
 				break;
 				// Deal with KeyPressed
 			case sf::Event::KeyPressed:
+				//////////////////////////////////////////////////////////////////////////////////
+				// added cases
+				//////////////////////////////////////////////////////////////////////////////////
+
+				//Kick event
+				if(sf::Keyboard::isKeyPressed(sf::Keyboard::K))
+				{
+					DEBUG_MSG("gpp::Events::Event::KICK_STAR_EVENT");
+					input.setCurrent(gpp::Events::Event::KICK_START_EVENT);
+					//player.setAnimatedSprite(new_animated_sprite);
+				} //Punch event
+				else if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+				{
+					DEBUG_MSG("gpp::Events::Event::PUNCH_STAR_EVENT");
+					input.setCurrent(gpp::Events::Event::PUNCH_START_EVENT);
+					//player.setAnimatedSprite(new_animated_sprite);
+
+				}//Block event
+				else if(sf::Keyboard::isKeyPressed(sf::Keyboard::B))
+				{
+					DEBUG_MSG("gpp::Events::Event::BLOCK_STAR_EVENT");
+					input.setCurrent(gpp::Events::Event::BLOCK_START_EVENT);
+					//player.setAnimatedSprite(new_animated_sprite);
+				}
+
+
 				// Died Event
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 				{
@@ -168,6 +196,29 @@ int main()
 
 				// Deal with KeyReleased
 			case sf::Event::KeyReleased:
+				///////////////////////////////////////////////////////////////////////////
+				//added cases
+				///////////////////////////////////////////////////////////////////////////
+
+				//stop kick
+				if(event.key.code==sf::Keyboard::K)
+				{
+					DEBUG_MSG("gpp::Events::Event::KICK_STOP_EVENT");
+					input.setCurrent(gpp::Events::Event::KICK_STOP_EVENT);
+					//player.setAnimatedSprite(player_animated_sprite);
+				}
+				else if(event.key.code==sf::Keyboard::P)
+				{
+					DEBUG_MSG("gpp::Events::Event::PUNCH_STOP_EVENT");
+					input.setCurrent(gpp::Events::Event::PUNCH_STOP_EVENT);
+				}
+				else if(event.key.code==sf::Keyboard::B)
+				{
+					DEBUG_MSG("gpp::Events::Event::BLOCK_STOP_EVENT");
+					input.setCurrent(gpp::Events::Event::BLOCK_STOP_EVENT);
+				}
+
+
 				// Run and Stop Attack
 				if (event.key.code == sf::Keyboard::Z &&
 					sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -247,7 +298,7 @@ int main()
 		window.draw(player.getAnimatedSpriteFrame());
 
 		// Draw the NPC's Current Animated Sprite
-		window.draw(npc.getAnimatedSpriteFrame());
+		//window.draw(npc.getAnimatedSpriteFrame());
 
 		// Update the window
 		window.display();

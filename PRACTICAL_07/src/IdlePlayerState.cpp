@@ -9,6 +9,10 @@
 #include <DecendLadderPlayerState.h>
 #include <JumpPlayerState.h>
 #include <DiedPlayerState.h>
+#include <PunchPlayerState.h>
+#include <KickPlayerState.h>
+#include <BlockPlayerState.h>
+
 
 
 PlayerState* IdlePlayerState::handleInput(gpp::Events& input) {
@@ -43,7 +47,23 @@ PlayerState* IdlePlayerState::handleInput(gpp::Events& input) {
 		DEBUG_MSG("IdlePlayerState -> DiedPlayerState");
 		return new DiedPlayerState();
 	}
+	else if( input.getCurrent()== gpp::Events::Event::KICK_START_EVENT)
+	{
+		DEBUG_MSG("IdlePlayerState -> KickPlayerState");
+		return new KickPlayerState();
+	}
+	else if( input.getCurrent()== gpp::Events::Event::PUNCH_START_EVENT)
+	{
+		DEBUG_MSG("IdlePlayerState -> PunchPlayerState");
+		return new PunchPlayerState();
+	}
+	else if( input.getCurrent()== gpp::Events::Event::BLOCK_START_EVENT)
+	{
+		DEBUG_MSG("IdlePlayerState -> BlockPlayerState");
+		return new BlockPlayerState();
+	}
 	return nullptr;
+
 }
 
 void IdlePlayerState::update(Player& player) {
