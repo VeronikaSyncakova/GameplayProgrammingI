@@ -1,0 +1,56 @@
+#ifndef EVENT_H
+#define EVENT_H
+
+namespace gpp {
+	class Events
+	{
+	public:
+		Events();
+		~Events();
+
+		enum class Event
+		{
+			NONE,
+			SHIELD_START_EVENT,
+			SHIELD_STOP_EVENT,
+			SWORD_START_EVENT,
+			SWORD_STOP_EVENT,
+			BAT_START_EVENT,
+			BAT_STOP_EVENT,
+			MOVE_UP_START_EVENT,
+			MOVE_UP_STOP_EVENT,
+			RUN_RIGHT_START_EVENT,
+			RUN_RIGHT_STOP_EVENT,
+			MOVE_DOWN_START_EVENT,
+			MOVE_DOWN_STOP_EVENT,
+			JUMP_UP_EVENT,
+			FALL_DOWN_EVENT,
+			SLIDE_EVENT,
+			ATTACK_START_EVENT,
+			ATTACK_STOP_EVENT,
+			THROW_START_EVENT,
+			THROW_STOP_EVENT,
+			HIT_WALL_EVENT,
+			HIT_GROUND_EVENT,
+			HIT_LADDER_TOP_EVENT,
+			HIT_LADDER_BOTTOM_EVENT,
+			DIED_EVENT,
+			REVIVED_EVENT,
+			KICK_START_EVENT,
+			KICK_STOP_EVENT,
+			BLOCK_START_EVENT,
+			BLOCK_STOP_EVENT,
+			PUNCH_START_EVENT,
+			PUNCH_STOP_EVENT,
+			Count
+		};
+
+		void setCurrent(Event);
+		Event getCurrent();
+
+	private:
+		Event m_current;
+	};
+}
+
+#endif
