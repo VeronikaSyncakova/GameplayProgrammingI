@@ -19,7 +19,7 @@ PlayerState* BlockPlayerState::handleInput(gpp::Events& input) {
 
 void BlockPlayerState::update(Player& player) {
 	DEBUG_MSG(typeid(player).name());
-	if (player.getHealth()<=0)
+	if (player.getHealth()<=0) //player is dead
 	{
 		PlayerState* temp = player.getPlayerState();
 		PlayerState* state = new DiedPlayerState();
@@ -28,7 +28,7 @@ void BlockPlayerState::update(Player& player) {
 		player.getPlayerState()->enter(player);
 		delete temp;
 	}
-	else if (player.getAnimatedSprite().getPlayed())
+	else if (player.getAnimatedSprite().getPlayed()) //animation is finished
 	{
 		PlayerState* temp = player.getPlayerState();
 		PlayerState* state = new IdlePlayerState();

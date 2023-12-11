@@ -18,6 +18,18 @@ int main()
 	// Create the main window
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Pproject Orc vs Troll");
 
+	sf::Font font;
+	font.loadFromFile("assets/redBurger.otf");
+	sf::Text playerHealth;
+	playerHealth.setPosition(100.0f, 500.0f);
+	playerHealth.setFillColor(sf::Color::Green);
+	playerHealth.setFont(font);
+	sf::Text npcHealth;
+	npcHealth.setPosition(700.0f, 500.0f);
+	npcHealth.setColor(sf::Color::Green);
+	npcHealth.setFont(font);
+
+
 	// Load a sprite to display
 	sf::Texture player_texture;
 	if (!player_texture.loadFromFile(PLAYER_SPRITES))
@@ -40,10 +52,13 @@ int main()
 	Command *kick = new KickCommand();
 	Command *block = new BlockCommand();
 	Command *punch = new PunchCommand();
+	Command *revived=new RevievedCommand();
 
 	InputManager::getInstance()->keyCommands(Keyboard::K, kick);
 	InputManager::getInstance()->keyCommands(Keyboard::B, block);
 	InputManager::getInstance()->keyCommands(Keyboard::P, punch);
+	InputManager::getInstance()->keyCommands(Keyboard::R, revived);
+
 
 	int index = -1;
 	std::vector<Command*> commands;
@@ -92,42 +107,13 @@ int main()
 					index++;
 				}
 
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) && npc.getHealth()<= 0)
+				{
+					ai.setCurrent(gpp::Events::Event::REVIVED_EVENT);
+				}
+
 			}
-		/*
-				//Kick event
-				if(sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-				{
-					DEBUG_MSG("gpp::Events::Event::KICK_STAR_EVENT");
-					input.setCurrent(gpp::Events::Event::KICK_START_EVENT);
-					
-				} //Punch event
-				else if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
-				{
-					DEBUG_MSG("gpp::Events::Event::PUNCH_STAR_EVENT");
-					input.setCurrent(gpp::Events::Event::PUNCH_START_EVENT);
-					
 
-				}//Block event
-				else if(sf::Keyboard::isKeyPressed(sf::Keyboard::B))
-				{
-					DEBUG_MSG("gpp::Events::Event::BLOCK_STAR_EVENT");
-					input.setCurrent(gpp::Events::Event::BLOCK_START_EVENT);
-					
-				}
-
-				// Died Event
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-				{
-					DEBUG_MSG("gpp::Events::Event::DIED_EVENT");
-					input.setCurrent(gpp::Events::Event::DIED_EVENT);
-				}
-				// Revieved Event
-				else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-				{
-					DEBUG_MSG("gpp::Events::Event::REVIVED_EVENT");
-					input.setCurrent(gpp::Events::Event::REVIVED_EVENT);
-				}
-		*/
 				// Deal with KeyReleased
 			else if(sf::Event::KeyReleased==event.type)
 			{
@@ -152,12 +138,9 @@ int main()
 			}
 			// Handle input to Player
 			player.handleInput(input);
+			// Handle input to NPC
 			npc.handleInput(ai);
 		}
-
-		// Update AI
-		//ai.setCurrent(gpp::Events::Event::NONE);
-		//npc.handleInput(ai);
 
 		// Update the Player
 		player.update();
@@ -166,13 +149,13 @@ int main()
 		npc.update();
 
 		//check collision and move the collision circles
-		if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle())&& player.getPlayerState()->getCurrentState()== gpp::Events::Event::NONE)
+		if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle())&& player.getPlayerState()->getCurrentState()== gpp::Events::Event::NONE)//exit collision
 		{
 			calculated=0;
 			player.setCirclePosition(sf::Vector2f(0.0f,30.0f));
 			npc.setCirclePosition(sf::Vector2f(700.0f,30.0f));
 		}
-		else if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle()))
+		else if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle())) //collision
 		{
 			DEBUG_MSG("Circles are in Collision");
 			input.setCurrent(gpp::Events::Event::NONE);
@@ -183,16 +166,16 @@ int main()
 			}
 			calculated++;
 		}
-		else if(player.getPlayerState()->getCurrentState()!= gpp::Events::Event::NONE)
+		else if(player.getPlayerState()->getCurrentState()!= gpp::Events::Event::NONE) //no collision, move circles
 		{
 			DEBUG_MSG("No Collision");
 			player.updateCircle(1);
 			npc.updateCircle(-1);
 		}
-		DEBUG_MSG(player.getHealth());
-		DEBUG_MSG(npc.getHealth());
+
 		
-		
+		playerHealth.setString(std::to_string(player.getHealth()));
+		npcHealth.setString(std::to_string(npc.getHealth()));
 		
 
 		// Clear screen
@@ -207,6 +190,11 @@ int main()
 		npc.getAnimatedSprite().setPosition(600.0f,0.0f);
 		window.draw(npc.getAnimatedSpriteFrame());
 		window.draw(npc.getCircle().getBody());
+
+		//draw text
+		window.draw(playerHealth);
+		window.draw(npcHealth);
+
 
 		// Update the window
 		window.display();

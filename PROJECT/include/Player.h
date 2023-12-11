@@ -30,6 +30,7 @@ public:
 	void setCirclePosition(sf::Vector2f t_position);
 	void calculateHealth(Player& enemy);
 	int getHealth();
+	void setHealth(int t_health);
 };
 #endif
 

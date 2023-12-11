@@ -9,6 +9,7 @@ PlayerState *DiedPlayerState::handleInput(gpp::Events &input)
 	if (input.getCurrent() == gpp::Events::Event::REVIVED_EVENT)
 	{
 		DEBUG_MSG("DiedPlayerState -> RevivedPlayerState");
+		
 		return new RevivedPlayerState();
 	}
 	return nullptr;

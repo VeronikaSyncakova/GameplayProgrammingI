@@ -89,6 +89,23 @@ void Player::calculateHealth(Player& enemy)
 			
 		}
 	}
+
+	if(m_health<0)
+	{
+		m_health=0;
+	}
+	else if(m_health>100)
+	{
+		m_health=100;
+	}
+	if(enemy.m_health<0)
+	{
+		enemy.m_health=0;
+	}
+	else if(enemy.m_health>100)
+	{
+		enemy.m_health=100;
+	}
 }
 
 
@@ -124,4 +141,9 @@ void Player::setCirclePosition(sf::Vector2f t_position)
 int Player::getHealth()
 {
 	return m_health;
+}
+
+void Player::setHealth(int t_health)
+{
+	m_health=t_health;
 }

@@ -31,6 +31,7 @@ void RevivedPlayerState::enter(Player& player)
 	DEBUG_MSG("Entering RevivedPlayerState");
 	m_currentState=gpp::Events::Event::REVIVED_EVENT;
 
+	player.setHealth(100);
 
 	// How long in State Clock
 	this->m_clock.restart();

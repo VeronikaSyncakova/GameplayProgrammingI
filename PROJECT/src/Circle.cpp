@@ -13,10 +13,9 @@ void Circle::setCircle(int radius, sf::Vector2f position)
     m_body.setPosition(m_position);
     m_body.setRadius(m_radius);
     m_body.setOutlineColor(sf::Color::Green);
-    //m_body.setFillColor(sf::Color::Green);
 }
 
-bool Circle::circleCollision(c2Circle t_circle)
+bool Circle::circleCollision(c2Circle t_circle) //collision checking with enemy
 {
     if(c2CircletoCircle(m_collisionCircle, t_circle))
 	{
