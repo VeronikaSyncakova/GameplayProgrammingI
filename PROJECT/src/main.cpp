@@ -164,18 +164,25 @@ int main()
 		npc.update();
 
 		//check collision and move the collision circles
-		if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle()))
+		if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle())&& player.getPlayerState()->getCurrentState()== gpp::Events::Event::NONE)
+		{
+			player.setCirclePosition(sf::Vector2f(0.0f,30.0f));
+			npc.setCirclePosition(sf::Vector2f(700.0f,30.0f));
+		}
+		else if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle()))
 		{
 			DEBUG_MSG("Circles are in Collision");
 			input.setCurrent(gpp::Events::Event::NONE);
 			ai.setCurrent(gpp::Events::Event::NONE);
+			
 		}
-		else if(input.getCurrent()!= gpp::Events::Event::NONE)
+		else if(player.getPlayerState()->getCurrentState()!= gpp::Events::Event::NONE)
 		{
 			DEBUG_MSG("No Collision");
-			player.updateCircle(5);
-			npc.updateCircle(-5);
+			player.updateCircle(1);
+			npc.updateCircle(-1);
 		}
+		
 		
 		
 

@@ -21,6 +21,8 @@ void DiedPlayerState::update(Player &player)
 void DiedPlayerState::enter(Player &player)
 {
 	DEBUG_MSG("Entering DiedPlayerState");
+	m_currentState=gpp::Events::Event::DIED_EVENT;
+
 	player.getAnimatedSprite().clearFrames();
 
 	player.getAnimatedSprite().setPlayed(false);

@@ -19,6 +19,10 @@ public:
 	virtual void update(Player &) = 0;
 	virtual void enter(Player &) = 0;
 	virtual void exit(Player &) = 0;
+	gpp::Events::Event getCurrentState(){return m_currentState;}
+
+protected:
+	gpp::Events::Event m_currentState;
 
 };
 

@@ -15,6 +15,7 @@ class Circle
         void moveCircle(int direction);
         c2Circle getCollisionCircle();
         sf::CircleShape getBody();
+        void setPosition(sf::Vector2f t_position);
 
     private:
        sf::CircleShape m_body;

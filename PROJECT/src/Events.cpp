@@ -30,3 +30,4 @@ void gpp::Events::setRandom()
 		m_current=Event::PUNCH_START_EVENT;
 	}
 }
+

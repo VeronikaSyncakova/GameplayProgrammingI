@@ -44,3 +44,10 @@ sf::CircleShape Circle::getBody()
 {
     return m_body;
 }
+
+void Circle::setPosition(sf::Vector2f t_position)
+{
+    m_position=t_position;
+    m_body.setPosition(m_position);
+    m_collisionCircle.p=c2V(m_position.x, m_position.y);
+}

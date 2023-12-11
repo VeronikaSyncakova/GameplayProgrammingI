@@ -58,3 +58,8 @@ void Player::setAnimatedSprite(AnimatedSprite& animated_sprite) {
 PlayerState* Player::getPlayerState() { return this->m_state; }
 
 void Player::setPlayerState(PlayerState* state) { this->m_state = state; }
+
+void Player::setCirclePosition(sf::Vector2f t_position)
+{
+	m_circle.setPosition(t_position);
+}

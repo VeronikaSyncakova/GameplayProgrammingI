@@ -26,6 +26,7 @@ public:
 	void setPlayerState(PlayerState*);
 	void updateCircle(int direction);
 	Circle getCircle();
+	void setCirclePosition(sf::Vector2f t_position);
 };
 #endif
 

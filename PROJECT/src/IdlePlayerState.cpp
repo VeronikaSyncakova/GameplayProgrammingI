@@ -41,6 +41,8 @@ void IdlePlayerState::update(Player& player) {
 void IdlePlayerState::enter(Player& player) 
 {
 	DEBUG_MSG("Entering IdlePlayerState");
+	m_currentState=gpp::Events::Event::NONE;
+
 	player.getAnimatedSprite().clearFrames();
 
 	player.getAnimatedSprite().addFrame(sf::IntRect(3900, 0, 232, 439));

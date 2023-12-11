@@ -6,16 +6,17 @@
 
 
 PlayerState* PunchPlayerState::handleInput(gpp::Events& input) {
-    if (input.getCurrent()== gpp::Events::Event::PUNCH_STOP_EVENT)
+	/*
+    if (input.getCurrent()== gpp::Events::Event::NONE)
     {
         return new IdlePlayerState();
     }
+	*/
 	return nullptr;
 }
 
 void PunchPlayerState::update(Player& player) {
 	DEBUG_MSG(typeid(player).name());
-	/*
 	if (player.getAnimatedSprite().getPlayed())
 	{
 		PlayerState* temp = player.getPlayerState();
@@ -25,12 +26,15 @@ void PunchPlayerState::update(Player& player) {
 		player.getPlayerState()->enter(player);
 		delete temp;
 	}
-	*/
+	
+
 }
 
 void PunchPlayerState::enter(Player& player) 
 {
-	DEBUG_MSG("Entering KickPlayerState");
+	DEBUG_MSG("Entering PunchPlayerState");
+	m_currentState=gpp::Events::Event::PUNCH_START_EVENT;
+	
 	player.getAnimatedSprite().clearFrames();
 
 	player.getAnimatedSprite().addFrame(sf::IntRect(70, 4709, 113, 200));
@@ -41,6 +45,6 @@ void PunchPlayerState::enter(Player& player)
 
 void PunchPlayerState::exit(Player& player)
 {
-	DEBUG_MSG("Exiting KickPlayerState");
+	DEBUG_MSG("Exiting PunchPlayerState");
 	DEBUG_MSG(typeid(player).name());
 }
