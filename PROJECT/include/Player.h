@@ -13,6 +13,7 @@ private:
 	PlayerState* m_state;
 	AnimatedSprite m_animated_sprite;
 	Circle m_circle;
+	int m_health;
 
 public:
 	Player(const AnimatedSprite&, sf::Vector2f);
@@ -27,6 +28,8 @@ public:
 	void updateCircle(int direction);
 	Circle getCircle();
 	void setCirclePosition(sf::Vector2f t_position);
+	void calculateHealth(Player& enemy);
+	int getHealth();
 };
 #endif
 

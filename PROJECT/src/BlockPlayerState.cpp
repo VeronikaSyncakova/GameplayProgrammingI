@@ -2,6 +2,7 @@
 
 #include <BlockPlayerState.h>
 #include <IdlePlayerState.h>
+#include <DiedPlayerState.h>
 
 
 
@@ -18,7 +19,16 @@ PlayerState* BlockPlayerState::handleInput(gpp::Events& input) {
 
 void BlockPlayerState::update(Player& player) {
 	DEBUG_MSG(typeid(player).name());
-	if (player.getAnimatedSprite().getPlayed())
+	if (player.getHealth()<=0)
+	{
+		PlayerState* temp = player.getPlayerState();
+		PlayerState* state = new DiedPlayerState();
+		player.getPlayerState()->exit(player);
+		player.setPlayerState(state);
+		player.getPlayerState()->enter(player);
+		delete temp;
+	}
+	else if (player.getAnimatedSprite().getPlayed())
 	{
 		PlayerState* temp = player.getPlayerState();
 		PlayerState* state = new IdlePlayerState();
@@ -46,4 +56,5 @@ void BlockPlayerState::exit(Player& player)
 {
 	DEBUG_MSG("Exiting KickPlayerState");
 	DEBUG_MSG(typeid(player).name());
+	
 }

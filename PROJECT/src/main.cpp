@@ -51,6 +51,8 @@ int main()
 	gpp::Events input;
 	gpp::Events ai;
 
+	int calculated=0;
+
 	// Start the game loop
 	while (window.isOpen())
 	{
@@ -166,6 +168,7 @@ int main()
 		//check collision and move the collision circles
 		if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle())&& player.getPlayerState()->getCurrentState()== gpp::Events::Event::NONE)
 		{
+			calculated=0;
 			player.setCirclePosition(sf::Vector2f(0.0f,30.0f));
 			npc.setCirclePosition(sf::Vector2f(700.0f,30.0f));
 		}
@@ -174,7 +177,11 @@ int main()
 			DEBUG_MSG("Circles are in Collision");
 			input.setCurrent(gpp::Events::Event::NONE);
 			ai.setCurrent(gpp::Events::Event::NONE);
-			
+			if (calculated==0)
+			{
+				player.calculateHealth(npc);
+			}
+			calculated++;
 		}
 		else if(player.getPlayerState()->getCurrentState()!= gpp::Events::Event::NONE)
 		{
@@ -182,6 +189,8 @@ int main()
 			player.updateCircle(1);
 			npc.updateCircle(-1);
 		}
+		DEBUG_MSG(player.getHealth());
+		DEBUG_MSG(npc.getHealth());
 		
 		
 		

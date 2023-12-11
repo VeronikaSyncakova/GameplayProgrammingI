@@ -36,6 +36,15 @@ PlayerState* IdlePlayerState::handleInput(gpp::Events& input) {
 
 void IdlePlayerState::update(Player& player) {
 	DEBUG_MSG(typeid(player).name());
+	if (player.getHealth()<=0)
+	{
+		PlayerState* temp = player.getPlayerState();
+		PlayerState* state = new DiedPlayerState();
+		player.getPlayerState()->exit(player);
+		player.setPlayerState(state);
+		player.getPlayerState()->enter(player);
+		delete temp;
+	}
 }
 
 void IdlePlayerState::enter(Player& player) 
