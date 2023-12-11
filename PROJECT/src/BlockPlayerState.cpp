@@ -15,6 +15,7 @@ PlayerState* BlockPlayerState::handleInput(gpp::Events& input) {
 
 void BlockPlayerState::update(Player& player) {
 	DEBUG_MSG(typeid(player).name());
+	/*
 	if (player.getAnimatedSprite().getPlayed())
 	{
 		PlayerState* temp = player.getPlayerState();
@@ -24,6 +25,7 @@ void BlockPlayerState::update(Player& player) {
 		player.getPlayerState()->enter(player);
 		delete temp;
 	}
+	*/
 }
 
 void BlockPlayerState::enter(Player& player) 

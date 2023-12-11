@@ -5,15 +5,17 @@
 #include <AnimatedSprite.h>
 #include <stdio.h>
 #include <IdlePlayerState.h>
+#include <Circle.h>
 
 class Player
 {
 private:
 	PlayerState* m_state;
 	AnimatedSprite m_animated_sprite;
+	Circle m_circle;
 
 public:
-	Player(const AnimatedSprite&);
+	Player(const AnimatedSprite&, sf::Vector2f);
 	~Player();
 	virtual void handleInput(gpp::Events);
 	virtual void update();
@@ -22,6 +24,8 @@ public:
 	void setAnimatedSprite(AnimatedSprite&);
 	PlayerState* getPlayerState();
 	void setPlayerState(PlayerState*);
+	void updateCircle(int direction);
+	Circle getCircle();
 };
 #endif
 

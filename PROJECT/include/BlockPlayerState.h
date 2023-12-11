@@ -10,5 +10,8 @@ public:
 	virtual void update(Player&);
 	virtual void enter(Player&);
 	virtual void exit(Player&);
+
+private:
+	
 };
 #endif

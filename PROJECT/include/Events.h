@@ -1,6 +1,8 @@
 #ifndef EVENT_H
 #define EVENT_H
 
+#include <iostream>
+
 namespace gpp {
 	class Events
 	{
@@ -24,6 +26,7 @@ namespace gpp {
 
 		void setCurrent(Event);
 		Event getCurrent();
+		void setRandom();
 
 	private:
 		Event m_current;

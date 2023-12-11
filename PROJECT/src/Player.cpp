@@ -1,7 +1,8 @@
 #include <Player.h>
 
-Player::Player(const AnimatedSprite& sprite) : m_animated_sprite(sprite)
+Player::Player(const AnimatedSprite& sprite, sf::Vector2f t_position) : m_animated_sprite(sprite)
 {
+	m_circle.setCircle(20,t_position);
 	// Set the Player to Default to IdlePlayer State 
 	// and Enter that State
 	m_state = new IdlePlayerState();
@@ -28,6 +29,17 @@ void Player::update() {
 	m_animated_sprite.update();
 	m_state->update(*this);
 }
+
+void Player::updateCircle(int direction)
+{
+	m_circle.moveCircle(direction);
+}
+
+Circle Player::getCircle()
+{
+	return m_circle;
+}
+
 
 AnimatedSprite& Player::getAnimatedSprite() {
 	return m_animated_sprite;

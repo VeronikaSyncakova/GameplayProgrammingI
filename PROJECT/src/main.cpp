@@ -1,3 +1,5 @@
+#define CUTE_C2_IMPLEMENTATION
+
 #include <Defines.h>
 
 #include <iostream>
@@ -14,7 +16,7 @@ using namespace std;
 int main()
 {
 	// Create the main window
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Player Finite State Machine");
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Pproject Orc vs Troll");
 
 	// Load a sprite to display
 	sf::Texture player_texture;
@@ -32,8 +34,8 @@ int main()
 	AnimatedSprite player_animated_sprite(player_texture);
 	AnimatedSprite new_animated_sprite(player_texture);
 
-	Player player(player_animated_sprite);
-	Player npc(player_animated_sprite);
+	Player player(player_animated_sprite, sf::Vector2f(0.0f,30.0f));
+	Player npc(player_animated_sprite, sf::Vector2f(700.0f,30.0f));
 
 	Command *kick = new KickCommand();
 	Command *block = new BlockCommand();
@@ -73,6 +75,8 @@ int main()
 					commands.push_back(command->copy());
 					index++;
 					commands.erase(commands.begin() + index + 1, commands.end());
+
+					ai.setRandom();
 				}
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::U) && index > 0)
 				{
@@ -85,6 +89,7 @@ int main()
 					commands[index]->execute(input);
 					index++;
 				}
+
 			}
 		/*
 				//Kick event
@@ -132,20 +137,25 @@ int main()
 					commands.push_back(command->copy());
 					index++;
 					commands.erase(commands.begin() + index + 1, commands.end());
+
+					ai.setRandom();
+
 				}
 			}
 			else
 			{
 				DEBUG_MSG("gpp::Events::Event::NONE");
 				input.setCurrent(gpp::Events::Event::NONE);
+				ai.setCurrent(gpp::Events::Event::NONE);
 			}
 			// Handle input to Player
 			player.handleInput(input);
+			npc.handleInput(ai);
 		}
 
 		// Update AI
-		ai.setCurrent(gpp::Events::Event::NONE);
-		npc.handleInput(ai);
+		//ai.setCurrent(gpp::Events::Event::NONE);
+		//npc.handleInput(ai);
 
 		// Update the Player
 		player.update();
@@ -153,16 +163,34 @@ int main()
 		// Update the NPC
 		npc.update();
 
+		//check collision and move the collision circles
+		if (player.getCircle().circleCollision(npc.getCircle().getCollisionCircle()))
+		{
+			DEBUG_MSG("Circles are in Collision");
+			input.setCurrent(gpp::Events::Event::NONE);
+			ai.setCurrent(gpp::Events::Event::NONE);
+		}
+		else if(input.getCurrent()!= gpp::Events::Event::NONE)
+		{
+			DEBUG_MSG("No Collision");
+			player.updateCircle(5);
+			npc.updateCircle(-5);
+		}
+		
+		
+
 		// Clear screen
 		window.clear();
 
 		// Draw the Players Current Animated Sprite
 		window.draw(player.getAnimatedSpriteFrame());
+		window.draw(player.getCircle().getBody());
 
 		// Draw the NPC's Current Animated Sprite
 		npc.getAnimatedSprite().setScale(-1.0f, 1.0f);
 		npc.getAnimatedSprite().setPosition(600.0f,0.0f);
 		window.draw(npc.getAnimatedSpriteFrame());
+		window.draw(npc.getCircle().getBody());
 
 		// Update the window
 		window.display();

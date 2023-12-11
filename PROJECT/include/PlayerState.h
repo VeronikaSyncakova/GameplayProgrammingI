@@ -4,6 +4,8 @@
 #include <Debug.h>
 #include <Events.h>
 
+
+
 class Player;
 
 class PlayerState
@@ -17,6 +19,7 @@ public:
 	virtual void update(Player &) = 0;
 	virtual void enter(Player &) = 0;
 	virtual void exit(Player &) = 0;
+
 };
 
 #endif
